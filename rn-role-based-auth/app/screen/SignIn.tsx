@@ -22,23 +22,42 @@ const SignIn: FC<Props> = (props) => {
   const { updateAuthState } = useContext(AuthContext);
 
   const handleSignin = async () => {
-    // TODO: validate your userInfo
+    try {
+      // Valide que l'email et le mot de passe ne sont pas vides
+      if (!userInfo.email || !userInfo.password) {
+        throw new Error("L'email et le mot de passe sont requis.");
+      }
 
-    const signInRes = await fetch(signinUrl, {
-      method: "POST",
-      body: JSON.stringify(userInfo),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+      const signInRes = await fetch(signinUrl, {
+        method: "POST",
+        body: JSON.stringify(userInfo),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    const apiResJson = (await signInRes.json()) as {
-      profile: { name: string; email: string; role: "admin" | "user" };
-      token: string;
-    };
+      // Vérifie que le serveur renvoie bien une réponse JSON
+      const contentType = signInRes.headers.get("Content-Type");
+      if (contentType && contentType.includes("application/json")) {
+        const apiResJson = (await signInRes.json()) as {
+          profile: { name: string; email: string; role: "admin" | "user" };
+          token: string;
+        };
 
-    updateAuthState({ loggedIn: true, profile: apiResJson.profile });
-    await AsyncStorage.setItem("auth_token", apiResJson.token);
+        // Mets à jour l'état d'authentification
+        updateAuthState({ loggedIn: true, profile: apiResJson.profile });
+
+        // Sauvegarde le token dans AsyncStorage
+        await AsyncStorage.setItem("auth_token", apiResJson.token);
+
+        console.log("Connexion réussie !");
+      } else {
+        // Si la réponse n'est pas JSON, lève une erreur
+        throw new Error("La réponse du serveur n'est pas du JSON.");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la connexion:", (error as Error).message);
+    }
   };
 
   return (

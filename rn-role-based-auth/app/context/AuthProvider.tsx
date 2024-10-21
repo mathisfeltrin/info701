@@ -6,6 +6,7 @@ type profile = { name: string; email: string; role: "admin" | "user" };
 
 interface AuthState {
   loggedIn: boolean;
+  busy?: boolean;
   profile: profile | null;
 }
 
@@ -28,6 +29,7 @@ export const AuthContext = createContext<AuthContext>({
 const AuthProvider: FC<Props> = ({ children }) => {
   const [authState, setAuthState] = useState<AuthState>({
     loggedIn: false,
+    busy: true,
     profile: null,
   });
 
@@ -53,7 +55,16 @@ const AuthProvider: FC<Props> = ({ children }) => {
     };
 
     if (apiResJson.profile) {
-      updateAuthState({ loggedIn: true, profile: apiResJson.profile });
+      updateAuthState({
+        loggedIn: true,
+        profile: apiResJson.profile,
+        busy: false,
+      });
+    } else {
+      updateAuthState({
+        ...authState,
+        busy: false,
+      });
     }
   };
 
