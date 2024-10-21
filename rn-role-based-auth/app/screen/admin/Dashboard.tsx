@@ -6,20 +6,14 @@ import { AuthContext } from "../../context/AuthProvider";
 interface Props {}
 
 const Dashboard: FC<Props> = (props) => {
-  const { updateAuthState } = useContext(AuthContext);
+  const { updateAuthState, logout } = useContext(AuthContext);
   return (
     <View style={styles.container}>
       <Text style={{ fontWeight: "bold", fontSize: 25 }}>
         Welcome to Admin Dashboard
       </Text>
 
-      <Button
-        onPress={async () => {
-          await AsyncStorage.removeItem("auth_token");
-          updateAuthState({ loggedIn: false, profile: null });
-        }}
-        title="Logout"
-      />
+      <Button onPress={logout} title="Logout" />
     </View>
   );
 };

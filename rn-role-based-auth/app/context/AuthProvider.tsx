@@ -15,12 +15,14 @@ interface Props {
 
 interface AuthContext extends AuthState {
   updateAuthState(state: AuthState): void;
+  logout(): Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContext>({
   loggedIn: false,
   profile: null,
   updateAuthState() {},
+  logout: async () => {},
 });
 
 const AuthProvider: FC<Props> = ({ children }) => {
@@ -55,6 +57,11 @@ const AuthProvider: FC<Props> = ({ children }) => {
     }
   };
 
+  const logout = async () => {
+    await AsyncStorage.removeItem("auth_token");
+    updateAuthState({ loggedIn: false, profile: null });
+  };
+
   useEffect(() => {
     getAuthState();
   }, []);
@@ -64,6 +71,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
       value={{
         ...authState,
         updateAuthState,
+        logout,
       }}
     >
       {children}
