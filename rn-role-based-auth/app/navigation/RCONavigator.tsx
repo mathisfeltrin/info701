@@ -1,18 +1,19 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Dashboard from "../screen/admin/Dashboard";
+import RCO from "../screen/user-app/RCO";
 
 const Stack = createNativeStackNavigator<AdminNavigatorTypes>();
 
 export type AdminNavigatorTypes = {
   dashboard: undefined;
+  rco: undefined;
 };
 
-const AdminNavigator = () => {
+const RCONavigator = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="dashboard" component={Dashboard} />
+      <Stack.Screen name="rco" component={RCO} />
     </Stack.Navigator>
   );
 };
 
-export default AdminNavigator;
+export default RCONavigator;

@@ -1,18 +1,19 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Home from "../screen/user-app/Home";
+import Vendeur from "../screen/user-app/Vendeur";
 
 const Stack = createNativeStackNavigator<AppNavigatorTypes>();
 
 export type AppNavigatorTypes = {
   home: undefined;
+  vendeur: undefined;
 };
 
-const AppNavigator = () => {
+const VendeurNavigator = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="home" component={Home} />
+      <Stack.Screen name="home" component={Vendeur} />
     </Stack.Navigator>
   );
 };
 
-export default AppNavigator;
+export default VendeurNavigator;

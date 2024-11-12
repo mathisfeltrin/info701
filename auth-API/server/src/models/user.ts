@@ -5,7 +5,15 @@ interface UserDocument extends Document {
   email: string;
   name: string;
   password: string;
-  role: "user" | "admin";
+  role:
+    | "vendeur"
+    | "RCO"
+    | "secretaire"
+    | "chauffeur"
+    | "expert_produit"
+    | "accessoiriste"
+    | "FM"
+    | "comptable";
 }
 
 interface Methods {
@@ -31,8 +39,17 @@ const userSchema = new Schema<UserDocument, {}, Methods>(
     },
     role: {
       type: String,
-      enum: ["user", "admin"],
-      default: "user",
+      enum: [
+        "vendeur",
+        "RCO",
+        "secretaire",
+        "chauffeur",
+        "expert_produit",
+        "accessoiriste",
+        "FM",
+        "comptable",
+      ],
+      default: "vendeur",
     },
   },
   {

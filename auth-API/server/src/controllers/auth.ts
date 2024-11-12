@@ -2,18 +2,40 @@ import UserModel from "@/models/user";
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 
-// export const createUser: RequestHandler = async (req, res) => {
 export const createUser: RequestHandler = async (req: any, res: any) => {
-  const { email, name, password } = req.body;
+  const { email, name, password, role } = req.body;
 
   const oldUser = await UserModel.findOne({ email });
 
   if (oldUser)
     return res.status(403).json({ error: "this email is already use!" });
 
-  const user = await UserModel.create({ name, email, password });
+  // Vérifier si le rôle est valide
+  const validRoles = [
+    "vendeur",
+    "RCO",
+    "secretaire",
+    "chauffeur",
+    "expert_produit",
+    "accessoiriste",
+    "FM",
+    "comptable",
+  ];
+  if (!validRoles.includes(role)) {
+    return res.status(400).json({ error: "Rôle non valide" });
+  }
 
-  res.json({ success: true, user: { email, name, id: user._id.toString() } });
+  // Continuer la création de l'utilisateur
+  const newUser = new UserModel({ name, email, password, role });
+  await newUser.save();
+
+  res
+    .status(201)
+    .json({ message: "Utilisateur créé avec succès", user: newUser });
+
+  // const user = await UserModel.create({ name, email, password });
+
+  // res.json({ success: true, user: { email, name, id: user._id.toString() } });
 };
 
 // export const signin: RequestHandler = async (req, res) => {

@@ -2,7 +2,19 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createContext, FC, ReactNode, useEffect, useState } from "react";
 import { profileUrl } from "../url";
 
-type profile = { name: string; email: string; role: "admin" | "user" };
+type profile = {
+  name: string;
+  email: string;
+  role:
+    | "vendeur"
+    | "RCO"
+    | "secretaire"
+    | "chauffeur"
+    | "expert_produit"
+    | "accessoiriste"
+    | "FM"
+    | "comptable";
+};
 
 interface AuthState {
   loggedIn: boolean;

@@ -2,9 +2,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useContext } from "react";
 import { View, Text } from "react-native";
 import { AuthContext } from "../context/AuthProvider";
-import AdminNavigator from "./AdminNavigator";
-import AppNavigator from "./AppNavigator";
+import RCONavigator from "./RCONavigator";
+import VendeurNavigator from "./VendeurNavigator";
 import AuthNavigator from "./AuthNavigator";
+import SecretaireNavigator from "./SecretaireNavigator";
+import ChauffeurNavigator from "./ChauffeurNavigator";
 
 const Stack = createNativeStackNavigator();
 
@@ -13,7 +15,9 @@ const Navigator = () => {
 
   // we can return different navigators like <AuthNavigator /> <AdminNavigator /> or <AppNavigator/>
 
-  const isAdmin = profile?.role === "admin";
+  const isRCO = profile?.role === "RCO";
+  const isSecretaire = profile?.role === "secretaire";
+  const isChauffeur = profile?.role === "chauffeur";
 
   if (busy)
     return (
@@ -24,9 +28,13 @@ const Navigator = () => {
 
   if (!loggedIn) return <AuthNavigator />;
 
-  if (isAdmin) return <AdminNavigator />;
+  if (isRCO) return <RCONavigator />;
 
-  return <AppNavigator />;
+  if (isSecretaire) return <SecretaireNavigator />;
+
+  if (isChauffeur) return <ChauffeurNavigator />;
+
+  return <VendeurNavigator />;
 };
 
 export default Navigator;
