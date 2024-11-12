@@ -5,27 +5,25 @@ import {
   View,
   StyleSheet,
   TextInput,
-  Button,
   Pressable,
   Text,
+  TouchableOpacity,
 } from "react-native";
 import { AuthContext } from "../context/AuthProvider";
-
 import { AuthNavigatorTypes } from "../navigation/AuthNavigator";
 import { signinUrl } from "../url";
 
 interface Props {}
 
-const SignIn: FC<Props> = (props) => {
+const SignIn: FC<Props> = () => {
   const { navigate } = useNavigation<NavigationProp<AuthNavigatorTypes>>();
   const [userInfo, setUserInfo] = useState({ email: "", password: "" });
   const { updateAuthState } = useContext(AuthContext);
 
   const handleSignin = async () => {
     try {
-      // Valide que l'email et le mot de passe ne sont pas vides
       if (!userInfo.email || !userInfo.password) {
-        throw new Error("L'email et le mot de passe sont requis.");
+        throw new Error("Email et mot de passe requis.");
       }
 
       const signInRes = await fetch(signinUrl, {
@@ -36,49 +34,50 @@ const SignIn: FC<Props> = (props) => {
         },
       });
 
-      // Vérifie que le serveur renvoie bien une réponse JSON
       const contentType = signInRes.headers.get("Content-Type");
       if (contentType && contentType.includes("application/json")) {
-        const apiResJson = (await signInRes.json()) as {
-          profile: { name: string; email: string; role: "admin" | "user" };
-          token: string;
-        };
-
-        // Mets à jour l'état d'authentification
+        const apiResJson = await signInRes.json();
         updateAuthState({ loggedIn: true, profile: apiResJson.profile });
 
-        // Sauvegarde le token dans AsyncStorage
-        await AsyncStorage.setItem("auth_token", apiResJson.token);
-
-        console.log("Connexion réussie !");
+        if (apiResJson.token) {
+          await AsyncStorage.setItem("auth_token", apiResJson.token);
+        }
       } else {
-        // Si la réponse n'est pas JSON, lève une erreur
-        throw new Error("La réponse du serveur n'est pas du JSON.");
+        throw new Error("Erreur lors de la connexion.");
       }
     } catch (error) {
-      console.error("Erreur lors de la connexion:", (error as Error).message);
+      if (error instanceof Error) {
+        console.error("Erreur:", error.message);
+      } else {
+        console.error("Erreur inconnue:", error);
+      }
     }
   };
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Connexion</Text>
       <TextInput
         style={styles.input}
-        placeholder="Enter your email"
+        placeholder="Email"
         value={userInfo.email}
         onChangeText={(email) => setUserInfo({ ...userInfo, email })}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
       <TextInput
         style={styles.input}
-        placeholder="Enter your password"
+        placeholder="Mot de passe"
         value={userInfo.password}
         onChangeText={(password) => setUserInfo({ ...userInfo, password })}
         secureTextEntry
       />
-      <Button title="Signin" onPress={handleSignin} />
+      <TouchableOpacity style={styles.button} onPress={handleSignin}>
+        <Text style={styles.buttonText}>Se connecter</Text>
+      </TouchableOpacity>
 
       <Pressable onPress={() => navigate("signup")}>
-        <Text style={styles.link}>I am new signup</Text>
+        <Text style={styles.link}>Créer un compte</Text>
       </Pressable>
     </View>
   );
@@ -86,17 +85,45 @@ const SignIn: FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 80,
+    flex: 1,
+    backgroundColor: "#f5f5f5",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 30,
   },
   input: {
-    padding: 5,
-    borderWidth: 2,
-    marginVertical: 20,
+    width: "100%",
+    padding: 15,
+    borderRadius: 8,
+    backgroundColor: "#fff",
+    marginBottom: 15,
+    fontSize: 16,
+    borderColor: "#ddd",
+    borderWidth: 1,
+  },
+  button: {
+    width: "100%",
+    backgroundColor: "#007bff",
+    padding: 15,
+    borderRadius: 8,
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   link: {
-    color: "blue",
-    fontSize: 20,
-    paddingVertical: 10,
+    color: "#007bff",
+    fontSize: 16,
+    marginTop: 20,
   },
 });
 

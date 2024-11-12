@@ -38,33 +38,36 @@ const AuthProvider: FC<Props> = ({ children }) => {
   };
 
   const getAuthState = async () => {
-    const token = await AsyncStorage.getItem("auth_token");
-    if (!token) return;
+    try {
+      const token = await AsyncStorage.getItem("auth_token");
+      if (!token) {
+        updateAuthState({ loggedIn: false, profile: null, busy: false });
+        return;
+      }
 
-    const profileRes = await fetch(profileUrl, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-    });
-
-    const apiResJson = (await profileRes.json()) as {
-      profile: { name: string; email: string; role: "admin" | "user" };
-      token: string;
-    };
-
-    if (apiResJson.profile) {
-      updateAuthState({
-        loggedIn: true,
-        profile: apiResJson.profile,
-        busy: false,
+      const profileRes = await fetch(profileUrl, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
       });
-    } else {
-      updateAuthState({
-        ...authState,
-        busy: false,
-      });
+
+      if (!profileRes.ok) throw new Error("Failed to fetch profile");
+
+      const apiResJson = await profileRes.json();
+      if (apiResJson.profile) {
+        updateAuthState({
+          loggedIn: true,
+          profile: apiResJson.profile,
+          busy: false,
+        });
+      } else {
+        updateAuthState({ loggedIn: false, profile: null, busy: false });
+      }
+    } catch (error) {
+      console.error("Error fetching auth state:", error);
+      updateAuthState({ loggedIn: false, profile: null, busy: false });
     }
   };
 
