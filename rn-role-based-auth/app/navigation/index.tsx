@@ -7,6 +7,10 @@ import VendeurNavigator from "./VendeurNavigator";
 import AuthNavigator from "./AuthNavigator";
 import SecretaireNavigator from "./SecretaireNavigator";
 import ChauffeurNavigator from "./ChauffeurNavigator";
+import ExpertProduitNavigator from "./ExpertProduitNavigator";
+import AccessoiristeNavigator from "./AccessoiristeNavigator";
+import FMNavigator from "./FMNavigator";
+import ComptableNavigator from "./ComptableNavigator";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +22,10 @@ const Navigator = () => {
   const isRCO = profile?.role === "RCO";
   const isSecretaire = profile?.role === "secretaire";
   const isChauffeur = profile?.role === "chauffeur";
+  const isExpertProduit = profile?.role === "expert_produit";
+  const isAccessoiriste = profile?.role === "accessoiriste";
+  const isFM = profile?.role === "FM";
+  const isComptable = profile?.role === "comptable";
 
   if (busy)
     return (
@@ -33,6 +41,14 @@ const Navigator = () => {
   if (isSecretaire) return <SecretaireNavigator />;
 
   if (isChauffeur) return <ChauffeurNavigator />;
+
+  if (isExpertProduit) return <ExpertProduitNavigator />;
+
+  if (isAccessoiriste) return <AccessoiristeNavigator />;
+
+  if (isFM) return <FMNavigator />;
+
+  if (isComptable) return <ComptableNavigator />;
 
   return <VendeurNavigator />;
 };
