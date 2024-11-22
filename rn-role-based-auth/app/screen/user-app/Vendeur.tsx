@@ -3,7 +3,10 @@ import { View, StyleSheet, Text, Pressable, FlatList } from "react-native";
 import { AuthContext } from "../../context/AuthProvider";
 import CreateDelivery from "../../components/CreateDelivery"; // Import du composant CreateDelivery
 import DeliveryList from "../../components/DeliveryList"; // Import du composant DeliveryList
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, NavigationContainer } from "@react-navigation/native";
+import { createDrawerNavigator, DrawerItem } from "@react-navigation/drawer";
+
+const Drawer = createDrawerNavigator();
 
 interface Props {}
 
@@ -55,15 +58,47 @@ const Vendeur: FC<Props> = () => {
     },
   ];
 
+  // return (
+  //   <FlatList
+  //     data={sections}
+  //     renderItem={({ item }) => (
+  //       <View style={styles.section}>{item.content}</View>
+  //     )}
+  //     keyExtractor={(item) => item.key}
+  //     ListFooterComponent={<View style={{ height: 20 }} />} // Ajoute un espace en bas
+  //   />
+  // );
+
   return (
-    <FlatList
-      data={sections}
-      renderItem={({ item }) => (
-        <View style={styles.section}>{item.content}</View>
-      )}
-      keyExtractor={(item) => item.key}
-      ListFooterComponent={<View style={{ height: 20 }} />} // Ajoute un espace en bas
-    />
+    <NavigationContainer independent={true}>
+      <Drawer.Navigator
+        initialRouteName="DeliveryList"
+        screenOptions={{
+          headerStyle: { backgroundColor: "#007bff" },
+          headerTintColor: "#fff",
+          drawerActiveTintColor: "#007bff",
+          drawerLabelStyle: { fontSize: 16 },
+        }}
+      >
+        <Drawer.Screen
+          name="DeliveryList"
+          options={{ title: "Liste des Livraisons" }}
+        >
+          {() => <DeliveryList key={refreshKey} />}
+        </Drawer.Screen>
+
+        <Drawer.Screen
+          name="CreateDelivery"
+          options={{ title: "Créer une Livraison" }}
+        >
+          {() => (
+            <CreateDelivery
+              onSubmit={() => setRefreshKey((prevKey) => prevKey + 1)}
+            />
+          )}
+        </Drawer.Screen>
+      </Drawer.Navigator>
+    </NavigationContainer>
   );
 };
 
