@@ -13,4 +13,5 @@ npm run dev
 
 nom de la BDD : test
 
-nom de la collection : users
+nom de la collection pour les utilisateurs : users
+nom de la collection pour les livraisons : deliveries

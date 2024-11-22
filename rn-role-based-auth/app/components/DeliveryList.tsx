@@ -59,7 +59,7 @@ const DeliveryList: React.FC = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <>
       <Text style={styles.title}>Liste des Livraisons</Text>
       {deliveries.length === 0 ? (
         <Text style={styles.noDeliveries}>Aucune livraison trouvée.</Text>
@@ -68,13 +68,16 @@ const DeliveryList: React.FC = () => {
           data={deliveries}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
+            // <>
             <View style={styles.deliveryItem}>
-              <Text style={styles.deliveryText}>Modèle : {item.model}</Text>
+              <View style={styles.deliveryHeader}>
+                <Text style={styles.deliveryHeaderText}>
+                  Modèle : {item.model}
+                </Text>
+              </View>
+              <Text style={styles.deliveryText}>ID : {item.numeroId}</Text>
               <Text style={styles.deliveryText}>
                 Référence : {item.reference}
-              </Text>
-              <Text style={styles.deliveryText}>
-                Numéro ID : {item.numeroId}
               </Text>
               <Text style={styles.deliveryText}>Couleur : {item.couleur}</Text>
               <Text style={styles.deliveryText}>
@@ -84,10 +87,11 @@ const DeliveryList: React.FC = () => {
                 Site Destination : {item.siteDestination}
               </Text>
             </View>
+            // </>
           )}
         />
       )}
-    </View>
+    </>
   );
 };
 
@@ -125,13 +129,25 @@ const styles = StyleSheet.create({
   deliveryItem: {
     marginBottom: 15,
     padding: 15,
-    backgroundColor: "#fff",
-    borderRadius: 10,
+    backgroundColor: "#f9f9f9",
+    borderRadius: 12,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 2,
+    shadowRadius: 5,
+    elevation: 3,
+    borderLeftWidth: 5, // Pour un badge visuel
+    borderLeftColor: "#007bff",
+  },
+  deliveryHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 10,
+  },
+  deliveryHeaderText: {
+    fontWeight: "bold",
+    fontSize: 18,
+    color: "#007bff",
   },
   deliveryText: {
     fontSize: 16,
