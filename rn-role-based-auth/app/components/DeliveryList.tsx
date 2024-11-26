@@ -60,7 +60,7 @@ const DeliveryList: React.FC = () => {
 
   return (
     <>
-      <Text style={styles.title}>Liste des Livraisons</Text>
+      {/* <Text style={styles.title}>Liste des Livraisons</Text> */}
       {deliveries.length === 0 ? (
         <Text style={styles.noDeliveries}>Aucune livraison trouvée.</Text>
       ) : (
@@ -98,6 +98,7 @@ const DeliveryList: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+
     padding: 20,
     backgroundColor: "#f5f5f5",
   },
@@ -127,7 +128,9 @@ const styles = StyleSheet.create({
     color: "#555",
   },
   deliveryItem: {
-    marginBottom: 15,
+    marginTop: 15,
+    marginLeft: 20,
+    marginRight: 20,
     padding: 15,
     backgroundColor: "#f9f9f9",
     borderRadius: 12,

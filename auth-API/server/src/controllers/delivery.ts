@@ -2,10 +2,7 @@ import { Request, Response, RequestHandler, NextFunction } from "express";
 import DeliveryModel from "../models/delivery";
 
 // Créer une nouvelle livraison
-export const createDelivery: RequestHandler = async (
-  req: Request,
-  res: Response
-) => {
+export const createDelivery: RequestHandler = async (req: any, res: any) => {
   try {
     const {
       model,
@@ -15,6 +12,29 @@ export const createDelivery: RequestHandler = async (
       sitePresence,
       siteDestination,
     } = req.body;
+
+    // Vérifier si le site est valide
+    const validSites = [
+      "Annecy",
+      "Aix Les Bains",
+      "Chambéry",
+      "Belley",
+      "Paris",
+      "Montpellier",
+      "Six-Fours",
+      "Thônes",
+      "Lyon",
+      "Marseille",
+      "Nancy",
+      "Strasbourg",
+      "Lille",
+    ];
+    if (!validSites.includes(sitePresence)) {
+      return res.status(400).json({ error: "Site non valide" });
+    }
+    if (!validSites.includes(siteDestination)) {
+      return res.status(400).json({ error: "Site non valide" });
+    }
 
     const newDelivery = new DeliveryModel({
       model,
@@ -26,6 +46,7 @@ export const createDelivery: RequestHandler = async (
     });
 
     await newDelivery.save();
+
     res
       .status(201)
       .json({ message: "Livraison créée avec succès", delivery: newDelivery });

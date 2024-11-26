@@ -1,10 +1,15 @@
 import React, { FC, useContext, useState } from "react";
-import { View, StyleSheet, Text, Pressable, FlatList } from "react-native";
+import { View, StyleSheet, Text, Alert } from "react-native";
 import { AuthContext } from "../../context/AuthProvider";
 import CreateDelivery from "../../components/CreateDelivery"; // Import du composant CreateDelivery
 import DeliveryList from "../../components/DeliveryList"; // Import du composant DeliveryList
-import { useFocusEffect, NavigationContainer } from "@react-navigation/native";
-import { createDrawerNavigator, DrawerItem } from "@react-navigation/drawer";
+import { NavigationContainer } from "@react-navigation/native";
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItem,
+  DrawerContentComponentProps,
+} from "@react-navigation/drawer";
 
 const Drawer = createDrawerNavigator();
 
@@ -14,60 +19,12 @@ const Vendeur: FC<Props> = () => {
   const { logout } = useContext(AuthContext);
   const [refreshKey, setRefreshKey] = useState(0);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      setRefreshKey((prevKey) => prevKey + 1); // Recharger l'écran
-    }, [])
-  );
-
-  // Données statiques pour structurer la page
-  const sections = [
-    {
-      key: "header",
-      content: <Text style={styles.title}>Bienvenue dans la page vendeur</Text>,
-    },
-    {
-      key: "create-delivery",
-      content: (
-        // <View style={styles.section}>
-        <>
-          {/* <Text style={styles.sectionTitle}>Créer une Livraison</Text> */}
-          <CreateDelivery
-            onSubmit={() => setRefreshKey((prevKey) => prevKey + 1)}
-          />
-        </>
-        // </View>
-      ),
-    },
-    {
-      key: "delivery-list",
-      content: (
-        <>
-          {/* <Text style={styles.sectionTitle}>Liste des Livraisons :</Text> */}
-          <DeliveryList key={refreshKey} />
-        </>
-      ),
-    },
-    {
-      key: "logout",
-      content: (
-        <Pressable style={styles.button} onPress={logout}>
-          <Text style={styles.buttonText}>Se Déconnecter</Text>
-        </Pressable>
-      ),
-    },
-  ];
-
-  // return (
-  //   <FlatList
-  //     data={sections}
-  //     renderItem={({ item }) => (
-  //       <View style={styles.section}>{item.content}</View>
-  //     )}
-  //     keyExtractor={(item) => item.key}
-  //     ListFooterComponent={<View style={{ height: 20 }} />} // Ajoute un espace en bas
-  //   />
-  // );
+  const handleLogout = () => {
+    Alert.alert("Déconnexion", "Êtes-vous sûr de vouloir vous déconnecter ?", [
+      { text: "Annuler", style: "cancel" },
+      { text: "Déconnecter", onPress: logout },
+    ]);
+  };
 
   return (
     <NavigationContainer independent={true}>
@@ -79,6 +36,9 @@ const Vendeur: FC<Props> = () => {
           drawerActiveTintColor: "#007bff",
           drawerLabelStyle: { fontSize: 16 },
         }}
+        drawerContent={(props) => (
+          <CustomDrawerContent {...props} onLogout={handleLogout} />
+        )}
       >
         <Drawer.Screen
           name="DeliveryList"
@@ -102,40 +62,38 @@ const Vendeur: FC<Props> = () => {
   );
 };
 
+const CustomDrawerContent: FC<
+  DrawerContentComponentProps & { onLogout: () => void }
+> = ({ onLogout, navigation, ...props }) => {
+  return (
+    <DrawerContentScrollView {...props}>
+      <DrawerItem
+        label="Liste des Livraisons"
+        onPress={() => navigation.navigate("DeliveryList")}
+      />
+      <DrawerItem
+        label="Créer une Livraison"
+        onPress={() => navigation.navigate("CreateDelivery")}
+      />
+      <View style={styles.separator} />
+      <DrawerItem
+        label="Se Déconnecter"
+        onPress={onLogout}
+        labelStyle={styles.logoutLabel}
+      />
+    </DrawerContentScrollView>
+  );
+};
+
 const styles = StyleSheet.create({
-  section: {
-    marginLeft: 20,
-    marginRight: 20,
-    marginBottom: 20,
-    padding: 15,
-    backgroundColor: "#fff",
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5,
+  separator: {
+    height: 1,
+    backgroundColor: "#ddd",
+    marginVertical: 10,
+    marginHorizontal: 10,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  button: {
-    backgroundColor: "#007bff",
-    paddingVertical: 15,
-    borderRadius: 8,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
+  logoutLabel: {
+    color: "#ff4d4f",
     fontWeight: "bold",
   },
 });

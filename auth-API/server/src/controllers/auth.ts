@@ -1,5 +1,5 @@
 import UserModel from "@/models/user";
-import { RequestHandler } from "express";
+import { Request, Response, RequestHandler, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
 export const createUser: RequestHandler = async (req: any, res: any) => {
@@ -27,6 +27,7 @@ export const createUser: RequestHandler = async (req: any, res: any) => {
 
   // Continuer la création de l'utilisateur
   const newUser = new UserModel({ name, email, password, role });
+
   await newUser.save();
 
   res

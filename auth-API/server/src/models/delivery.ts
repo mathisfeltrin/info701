@@ -5,8 +5,34 @@ interface DeliveryDocument extends Document {
   reference: string; // Référence unique de l'objet livré
   numeroId: string; // Numéro ID unique
   couleur: string; // Couleur associée
-  sitePresence: string; // Site de présence physique
-  siteDestination: string; // Site de destination
+  sitePresence:
+    | "Annecy"
+    | "Aix Les Bains"
+    | "Chambéry"
+    | "Belley"
+    | "Paris"
+    | "Montpellier"
+    | "Six-Fours"
+    | "Thônes"
+    | "Lyon"
+    | "Marseille"
+    | "Nancy"
+    | "Strasbourg"
+    | "Lille"; // Site de présence physique
+  siteDestination:
+    | "Annecy"
+    | "Aix Les Bains"
+    | "Chambéry"
+    | "Belley"
+    | "Paris"
+    | "Montpellier"
+    | "Six-Fours"
+    | "Thônes"
+    | "Lyon"
+    | "Marseille"
+    | "Nancy"
+    | "Strasbourg"
+    | "Lille"; // Site de destination
 }
 
 const deliverySchema = new Schema<DeliveryDocument>(
@@ -15,8 +41,46 @@ const deliverySchema = new Schema<DeliveryDocument>(
     reference: { type: String, required: true },
     numeroId: { type: String, required: true, unique: true },
     couleur: { type: String, required: true },
-    sitePresence: { type: String, required: true },
-    siteDestination: { type: String, required: true },
+    sitePresence: {
+      type: String,
+      enum: [
+        "Annecy",
+        "Aix Les Bains",
+        "Chambéry",
+        "Belley",
+        "Paris",
+        "Montpellier",
+        "Six-Fours",
+        "Thônes",
+        "Lyon",
+        "Marseille",
+        "Nancy",
+        "Strasbourg",
+        "Lille",
+      ],
+      default: "Annecy",
+      required: true,
+    },
+    siteDestination: {
+      type: String,
+      enum: [
+        "Annecy",
+        "Aix Les Bains",
+        "Chambéry",
+        "Belley",
+        "Paris",
+        "Montpellier",
+        "Six-Fours",
+        "Thônes",
+        "Lyon",
+        "Marseille",
+        "Nancy",
+        "Strasbourg",
+        "Lille",
+      ],
+      default: "Annecy",
+      required: true,
+    },
   },
   { timestamps: true }
 );

@@ -1,3 +1,4 @@
+import { Picker } from "@react-native-picker/picker";
 import React, { useState } from "react";
 import {
   View,
@@ -7,7 +8,25 @@ import {
   StyleSheet,
   Alert,
   ActivityIndicator,
+  TouchableOpacity,
+  ScrollView,
 } from "react-native";
+
+const SITES = [
+  "Annecy",
+  "Aix Les Bains",
+  "Chambéry",
+  "Belley",
+  "Paris",
+  "Montpellier",
+  "Six-Fours",
+  "Thônes",
+  "Lyon",
+  "Marseille",
+  "Nancy",
+  "Strasbourg",
+  "Lille",
+];
 
 interface DeliveryFormProps {
   onSubmit?: () => void; // Callback optionnel après création
@@ -19,8 +38,8 @@ const CreateDelivery: React.FC<DeliveryFormProps> = ({ onSubmit }) => {
     reference: "",
     numeroId: "",
     couleur: "",
-    sitePresence: "",
-    siteDestination: "",
+    sitePresence: SITES[0],
+    siteDestination: SITES[0],
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -55,8 +74,8 @@ const CreateDelivery: React.FC<DeliveryFormProps> = ({ onSubmit }) => {
         reference: "",
         numeroId: "",
         couleur: "",
-        sitePresence: "",
-        siteDestination: "",
+        sitePresence: SITES[0],
+        siteDestination: SITES[0],
       });
       if (onSubmit) onSubmit();
     } catch (err) {
@@ -65,101 +84,128 @@ const CreateDelivery: React.FC<DeliveryFormProps> = ({ onSubmit }) => {
     } finally {
       setIsLoading(false);
     }
-
-    // // Simuler une soumission de formulaire
-    // setTimeout(() => {
-    //   setIsLoading(false);
-    //   Alert.alert("Succès", "Livraison créée avec succès");
-    //   if (onSubmit) {
-    //     onSubmit();
-    //   }
-    // }, 2000);
   };
 
   return (
-    <>
-      <Text style={styles.title}>Créer une Livraison</Text>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
+        {/* <Text style={styles.title}>Créer une Livraison</Text> */}
+        <TextInput
+          style={styles.input}
+          placeholder="Modèle"
+          value={formData.model}
+          onChangeText={(value) => handleInputChange("model", value)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Référence"
+          value={formData.reference}
+          onChangeText={(value) => handleInputChange("reference", value)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Numéro ID"
+          value={formData.numeroId}
+          onChangeText={(value) => handleInputChange("numeroId", value)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Couleur"
+          value={formData.couleur}
+          onChangeText={(value) => handleInputChange("couleur", value)}
+        />
+        <Text style={styles.label}>Site de Présence</Text>
+        <Picker
+          selectedValue={formData.sitePresence}
+          style={styles.picker}
+          onValueChange={(value) => handleInputChange("sitePresence", value)}
+        >
+          {SITES.map((site) => (
+            <Picker.Item key={site} label={site} value={site} />
+          ))}
+        </Picker>
+        <Text style={styles.label}>Site de Destination</Text>
+        <Picker
+          selectedValue={formData.siteDestination}
+          style={styles.picker}
+          onValueChange={(value) => handleInputChange("siteDestination", value)}
+        >
+          {SITES.map((site) => (
+            <Picker.Item key={site} label={site} value={site} />
+          ))}
+        </Picker>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Modèle"
-        value={formData.model}
-        onChangeText={(value) => handleInputChange("model", value)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Référence"
-        value={formData.reference}
-        onChangeText={(value) => handleInputChange("reference", value)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Numéro ID"
-        value={formData.numeroId}
-        onChangeText={(value) => handleInputChange("numeroId", value)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Couleur"
-        value={formData.couleur}
-        onChangeText={(value) => handleInputChange("couleur", value)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Site de Présence"
-        value={formData.sitePresence}
-        onChangeText={(value) => handleInputChange("sitePresence", value)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Site de Destination"
-        value={formData.siteDestination}
-        onChangeText={(value) => handleInputChange("siteDestination", value)}
-      />
+        {error && <Text style={styles.error}>{error}</Text>}
 
-      {isLoading ? (
-        <ActivityIndicator size="large" color="#000" />
-      ) : (
-        <Pressable style={styles.button} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Créer</Text>
-        </Pressable>
-      )}
-    </>
+        {isLoading ? (
+          <ActivityIndicator size="large" color="#007bff" />
+        ) : (
+          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+            <Text style={styles.buttonText}>Créer</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#f9f9f9",
+  scrollContainer: {
+    flexGrow: 1,
     justifyContent: "center",
+    padding: 20,
+    backgroundColor: "#f5f5f5",
+  },
+  container: {
+    alignItems: "center",
+    width: "100%",
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
+    color: "#333",
+    marginBottom: 30,
   },
   input: {
-    height: 50,
-    borderColor: "#ccc",
-    borderWidth: 1,
+    width: "100%",
+    padding: 15,
     borderRadius: 8,
-    paddingHorizontal: 10,
-    marginBottom: 15,
     backgroundColor: "#fff",
+    marginBottom: 15,
+    fontSize: 16,
+    borderColor: "#ddd",
+    borderWidth: 1,
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  picker: {
+    width: "100%",
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    marginBottom: 15,
+    borderColor: "#ddd",
+    borderWidth: 1,
   },
   button: {
+    width: "100%",
     backgroundColor: "#007bff",
-    paddingVertical: 15,
+    padding: 15,
     borderRadius: 8,
     alignItems: "center",
+    marginVertical: 10,
   },
   buttonText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  error: {
+    color: "red",
+    fontSize: 14,
+    marginBottom: 15,
+    textAlign: "center",
   },
 });
 
