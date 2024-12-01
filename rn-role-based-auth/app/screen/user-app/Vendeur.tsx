@@ -1,5 +1,5 @@
-import React, { FC, useContext, useEffect, useState } from "react";
-import { View, StyleSheet, Text, Alert } from "react-native";
+import React, { FC, useContext, useState } from "react";
+import { View, StyleSheet, Alert } from "react-native";
 import { AuthContext } from "../../context/AuthProvider";
 import CreateDelivery from "../../components/CreateDelivery";
 import DeliveryList from "../../components/DeliveryList";
@@ -33,6 +33,9 @@ const Vendeur: FC<Props> = () => {
         screenOptions={{
           headerStyle: { backgroundColor: "#007bff" },
           headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
           drawerActiveTintColor: "#007bff",
           drawerLabelStyle: { fontSize: 16 },
         }}
