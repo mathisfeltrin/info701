@@ -5,12 +5,14 @@ import DeliveryModel from "../models/delivery";
 export const createDelivery: RequestHandler = async (req: any, res: any) => {
   try {
     const {
+      name,
       model,
       reference,
       numeroId,
       couleur,
       sitePresence,
       siteDestination,
+      presence,
     } = req.body;
 
     // Vérifier si le site est valide
@@ -37,12 +39,14 @@ export const createDelivery: RequestHandler = async (req: any, res: any) => {
     }
 
     const newDelivery = new DeliveryModel({
+      name,
       model,
       reference,
       numeroId,
       couleur,
       sitePresence,
       siteDestination,
+      presence,
     });
 
     await newDelivery.save();

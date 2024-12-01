@@ -3,7 +3,7 @@ import { Request, Response, RequestHandler, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
 export const createUser: RequestHandler = async (req: any, res: any) => {
-  const { email, name, password, role } = req.body;
+  const { email, name, password, role, site } = req.body;
 
   const oldUser = await UserModel.findOne({ email });
 
@@ -25,8 +25,28 @@ export const createUser: RequestHandler = async (req: any, res: any) => {
     return res.status(400).json({ error: "Rôle non valide" });
   }
 
+  // Vérifier si le site est valide
+  const validSites = [
+    "Annecy",
+    "Aix Les Bains",
+    "Chambéry",
+    "Belley",
+    "Paris",
+    "Montpellier",
+    "Six-Fours",
+    "Thônes",
+    "Lyon",
+    "Marseille",
+    "Nancy",
+    "Strasbourg",
+    "Lille",
+  ];
+  if (!validSites.includes(site)) {
+    return res.status(400).json({ error: "Site non valide" });
+  }
+
   // Continuer la création de l'utilisateur
-  const newUser = new UserModel({ name, email, password, role });
+  const newUser = new UserModel({ name, email, password, role, site });
 
   await newUser.save();
 
@@ -37,6 +57,31 @@ export const createUser: RequestHandler = async (req: any, res: any) => {
   // const user = await UserModel.create({ name, email, password });
 
   // res.json({ success: true, user: { email, name, id: user._id.toString() } });
+};
+
+export const getUserById: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const user = await UserModel.findById(id);
+    if (!user) {
+      res.status(404).json({ message: "Utilisateur introuvable" });
+    } else {
+      res.status(200).json(user);
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({
+        message: "Erreur lors de la récupération de l'utilisateur'",
+        error,
+      });
+  } finally {
+    next();
+  }
 };
 
 // export const signin: RequestHandler = async (req, res) => {
@@ -58,7 +103,12 @@ export const signin: RequestHandler = async (req: any, res: any) => {
   res.json({
     success: true,
     token,
-    profile: { name: user.name, role: user.role, email: user.email },
+    profile: {
+      name: user.name,
+      role: user.role,
+      email: user.email,
+      site: user.site,
+    },
   });
 };
 
@@ -76,6 +126,7 @@ export const sendProfile: RequestHandler = (req, res) => {
       name: req.user.name,
       email: req.user.email,
       role: req.user.role,
+      site: req.user.site,
     },
   });
 };

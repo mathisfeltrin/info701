@@ -17,8 +17,7 @@ const Stack = createNativeStackNavigator();
 const Navigator = () => {
   const { loggedIn, profile, busy } = useContext(AuthContext);
 
-  // we can return different navigators like <AuthNavigator /> <AdminNavigator /> or <AppNavigator/>
-
+  const isVendeur = profile?.role === "vendeur";
   const isRCO = profile?.role === "RCO";
   const isSecretaire = profile?.role === "secretaire";
   const isChauffeur = profile?.role === "chauffeur";
@@ -36,6 +35,8 @@ const Navigator = () => {
 
   if (!loggedIn) return <AuthNavigator />;
 
+  if (isVendeur) return <VendeurNavigator />;
+
   if (isRCO) return <RCONavigator />;
 
   if (isSecretaire) return <SecretaireNavigator />;
@@ -50,7 +51,7 @@ const Navigator = () => {
 
   if (isComptable) return <ComptableNavigator />;
 
-  return <VendeurNavigator />;
+  return <AuthNavigator />;
 };
 
 export default Navigator;

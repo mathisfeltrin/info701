@@ -5,6 +5,7 @@ import {
   privateReponse,
   sendProfile,
   signin,
+  getUserById,
 } from "./../controllers/auth";
 import { RequestHandler, Router } from "express";
 import { Request, Response, NextFunction } from "express";
@@ -71,7 +72,7 @@ authRouter.post("/signup", newUserValidator, createUser);
 authRouter.post("/signin", newUserValidator, signin);
 authRouter.get("/profile", isAuth, sendProfile);
 authRouter.get("/private", isAuth, privateReponse);
-// authRouter.get("/admin", isAuth, isAdmin, adminReponse);
+authRouter.get("/:id", getUserById);
 
 authRouter.get(
   "/dashboard",

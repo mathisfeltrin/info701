@@ -3,6 +3,7 @@ import { createContext, FC, ReactNode, useEffect, useState } from "react";
 import { profileUrl } from "../url";
 
 type profile = {
+  _id: string;
   name: string;
   email: string;
   role:
@@ -14,6 +15,20 @@ type profile = {
     | "accessoiriste"
     | "FM"
     | "comptable";
+  site:
+    | "Annecy"
+    | "Aix Les Bains"
+    | "Chambéry"
+    | "Belley"
+    | "Paris"
+    | "Montpellier"
+    | "Six-Fours"
+    | "Thônes"
+    | "Lyon"
+    | "Marseille"
+    | "Nancy"
+    | "Strasbourg"
+    | "Lille";
 };
 
 interface AuthState {

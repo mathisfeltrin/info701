@@ -14,6 +14,20 @@ interface UserDocument extends Document {
     | "accessoiriste"
     | "FM"
     | "comptable";
+  site:
+    | "Annecy"
+    | "Aix Les Bains"
+    | "Chambéry"
+    | "Belley"
+    | "Paris"
+    | "Montpellier"
+    | "Six-Fours"
+    | "Thônes"
+    | "Lyon"
+    | "Marseille"
+    | "Nancy"
+    | "Strasbourg"
+    | "Lille";
 }
 
 interface Methods {
@@ -50,6 +64,25 @@ const userSchema = new Schema<UserDocument, {}, Methods>(
         "comptable",
       ],
       default: "vendeur",
+    },
+    site: {
+      type: String,
+      enum: [
+        "Annecy",
+        "Aix Les Bains",
+        "Chambéry",
+        "Belley",
+        "Paris",
+        "Montpellier",
+        "Six-Fours",
+        "Thônes",
+        "Lyon",
+        "Marseille",
+        "Nancy",
+        "Strasbourg",
+        "Lille",
+      ],
+      default: "Annecy",
     },
   },
   {

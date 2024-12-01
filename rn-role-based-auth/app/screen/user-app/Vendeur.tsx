@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import { View, StyleSheet, Text, Alert } from "react-native";
 import { AuthContext } from "../../context/AuthProvider";
 import CreateDelivery from "../../components/CreateDelivery";
@@ -16,7 +16,7 @@ const Drawer = createDrawerNavigator();
 interface Props {}
 
 const Vendeur: FC<Props> = () => {
-  const { logout } = useContext(AuthContext);
+  const { profile, logout } = useContext(AuthContext);
   const [refreshKey, setRefreshKey] = useState(0);
 
   const handleLogout = () => {
@@ -44,7 +44,7 @@ const Vendeur: FC<Props> = () => {
           name="DeliveryList"
           options={{ title: "Liste des Livraisons" }}
         >
-          {() => <DeliveryList key={refreshKey} />}
+          {() => <DeliveryList sellerSite={profile?.site} key={refreshKey} />}
         </Drawer.Screen>
 
         <Drawer.Screen

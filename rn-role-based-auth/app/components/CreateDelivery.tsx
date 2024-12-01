@@ -34,12 +34,14 @@ interface DeliveryFormProps {
 
 const CreateDelivery: React.FC<DeliveryFormProps> = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
+    name: "",
     model: "",
     reference: "",
     numeroId: "",
     couleur: "",
     sitePresence: SITES[0],
     siteDestination: SITES[0],
+    presence: false,
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -63,19 +65,21 @@ const CreateDelivery: React.FC<DeliveryFormProps> = ({ onSubmit }) => {
       });
 
       if (!response.ok) {
-        throw new Error("Erreur lors de la création de la livraison");
+        throw new Error("Erreur lors de la création de la livraison !");
       }
 
       const data = await response.json();
       console.log("Livraison créée :", data);
       Alert.alert("Succès", "Livraison créée avec succès !");
       setFormData({
+        name: "",
         model: "",
         reference: "",
         numeroId: "",
         couleur: "",
         sitePresence: SITES[0],
         siteDestination: SITES[0],
+        presence: false,
       });
       if (onSubmit) onSubmit();
     } catch (err) {
@@ -89,7 +93,12 @@ const CreateDelivery: React.FC<DeliveryFormProps> = ({ onSubmit }) => {
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
-        {/* <Text style={styles.title}>Créer une Livraison</Text> */}
+        <TextInput
+          style={styles.input}
+          placeholder="Nom du client"
+          value={formData.name}
+          onChangeText={(value) => handleInputChange("name", value)}
+        />
         <TextInput
           style={styles.input}
           placeholder="Modèle"

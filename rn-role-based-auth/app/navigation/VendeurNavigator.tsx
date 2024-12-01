@@ -11,7 +11,7 @@ export type AppNavigatorTypes = {
 const VendeurNavigator = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="home" component={Vendeur} />
+      <Stack.Screen name="vendeur" component={Vendeur} />
     </Stack.Navigator>
   );
 };

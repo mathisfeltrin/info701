@@ -12,6 +12,22 @@ import { Picker } from "@react-native-picker/picker"; // Importer le Picker
 import { AuthNavigatorTypes } from "../navigation/AuthNavigator";
 import { signupUrl } from "../url";
 
+const SITES = [
+  "Annecy",
+  "Aix Les Bains",
+  "Chambéry",
+  "Belley",
+  "Paris",
+  "Montpellier",
+  "Six-Fours",
+  "Thônes",
+  "Lyon",
+  "Marseille",
+  "Nancy",
+  "Strasbourg",
+  "Lille",
+];
+
 interface Props {}
 
 const SignUp: FC<Props> = () => {
@@ -20,7 +36,8 @@ const SignUp: FC<Props> = () => {
     name: "",
     email: "",
     password: "",
-    role: "vendeur", // Valeur par défaut
+    role: "vendeur",
+    site: SITES[0],
   });
 
   const handleSignUp = async () => {
@@ -96,6 +113,18 @@ const SignUp: FC<Props> = () => {
         <Picker.Item label="Accessoiriste" value="accessoiriste" />
         <Picker.Item label="FM" value="FM" />
         <Picker.Item label="Comptable" value="comptable" />
+      </Picker>
+
+      <Picker
+        selectedValue={userInfo.site}
+        style={styles.picker}
+        onValueChange={(itemValue) =>
+          setUserInfo({ ...userInfo, site: itemValue })
+        }
+      >
+        {SITES.map((site) => (
+          <Picker.Item key={site} label={site} value={site} />
+        ))}
       </Picker>
 
       <TouchableOpacity style={styles.button} onPress={handleSignUp}>

@@ -6,10 +6,12 @@ import {
   StyleSheet,
   ActivityIndicator,
   Alert,
+  RefreshControl,
 } from "react-native";
 
 interface Delivery {
   _id: string;
+  name: string;
   model: string;
   reference: string;
   numeroId: string;
@@ -18,31 +20,51 @@ interface Delivery {
   siteDestination: string;
 }
 
-const DeliveryList: React.FC = () => {
+interface DeliveryListProps {
+  sellerSite: string | undefined;
+}
+
+const DeliveryList: React.FC<DeliveryListProps> = ({ sellerSite }) => {
   const [deliveries, setDeliveries] = useState<Delivery[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchDeliveries = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch("http://172.20.10.4:8000/deliveries"); // Remplacez localhost si nécessaire
-        if (!response.ok) {
-          throw new Error("Erreur lors de la récupération des livraisons");
-        }
-        const data = await response.json();
-        setDeliveries(data);
-      } catch (err) {
-        setError((err as Error).message);
-        Alert.alert("Erreur", error || "Impossible de charger les livraisons");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
+  // ? Recherche des livraisons selon le site du vendeur
+  //console.log("sellerSite : ", sellerSite);
+
+  const fetchDeliveries = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("http://172.20.10.4:8000/deliveries");
+      if (!response.ok) {
+        throw new Error("Erreur lors de la récupération des livraisons");
+      }
+      const data = await response.json();
+
+      const filteredDeliveries = data.filter(
+        (delivery: Delivery) =>
+          delivery.sitePresence === sellerSite ||
+          delivery.siteDestination === sellerSite
+      );
+
+      // afffichage des livraisons selon le site du vendeur
+      setDeliveries(filteredDeliveries);
+
+      // affichage de toutes les livraisons
+      // setDeliveries(data);
+    } catch (err) {
+      setError((err as Error).message);
+      Alert.alert("Erreur", error || "Impossible de charger les livraisons");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchDeliveries();
-  }, []);
+  }, [sellerSite]);
 
   if (loading) {
     return (
@@ -60,7 +82,6 @@ const DeliveryList: React.FC = () => {
 
   return (
     <>
-      {/* <Text style={styles.title}>Liste des Livraisons</Text> */}
       {deliveries.length === 0 ? (
         <Text style={styles.noDeliveries}>Aucune livraison trouvée.</Text>
       ) : (
@@ -68,13 +89,13 @@ const DeliveryList: React.FC = () => {
           data={deliveries}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
-            // <>
             <View style={styles.deliveryItem}>
               <View style={styles.deliveryHeader}>
                 <Text style={styles.deliveryHeaderText}>
-                  Modèle : {item.model}
+                  Client : {item.name}
                 </Text>
               </View>
+              <Text style={styles.deliveryText}>Modèle : {item.model}</Text>
               <Text style={styles.deliveryText}>
                 Référence : {item.reference}
               </Text>
@@ -87,8 +108,14 @@ const DeliveryList: React.FC = () => {
                 Site Destination : {item.siteDestination}
               </Text>
             </View>
-            // </>
           )}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={fetchDeliveries}
+              colors={["#007bff"]}
+            />
+          }
         />
       )}
     </>
@@ -139,7 +166,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
-    borderLeftWidth: 5, // Pour un badge visuel
+    borderLeftWidth: 5,
     borderLeftColor: "#007bff",
   },
   deliveryHeader: {

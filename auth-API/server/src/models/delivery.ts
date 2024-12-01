@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 
 interface DeliveryDocument extends Document {
+  name: string;
   model: string; // Modèle de l'objet
   reference: string; // Référence unique de l'objet livré
   numeroId: string; // Numéro ID unique
@@ -33,10 +34,12 @@ interface DeliveryDocument extends Document {
     | "Nancy"
     | "Strasbourg"
     | "Lille"; // Site de destination
+  presence: boolean;
 }
 
 const deliverySchema = new Schema<DeliveryDocument>(
   {
+    name: { type: String, required: true },
     model: { type: String, required: true },
     reference: { type: String, required: true },
     numeroId: { type: String, required: true, unique: true },
@@ -81,6 +84,7 @@ const deliverySchema = new Schema<DeliveryDocument>(
       default: "Annecy",
       required: true,
     },
+    presence: { type: Boolean },
   },
   { timestamps: true }
 );
