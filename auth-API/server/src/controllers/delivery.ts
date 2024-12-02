@@ -197,3 +197,41 @@ export const updatePresence: RequestHandler = async (req: any, res: any) => {
     });
   }
 };
+
+// Mettre à jour la disponibilité d'une livraison
+export const updateDisponibility: RequestHandler = async (
+  req: any,
+  res: any
+) => {
+  try {
+    const { id } = req.params;
+    const { disponible } = req.body; // Passez `disponible` dans le corps de la requête
+
+    // if (typeof disponible !== "string") {
+    //   return res
+    //     .status(400)
+    //     .json({ message: "La propriété disponible doit être un booléen" });
+    // }
+
+    // Mise à jour de la propriété `presence`
+    const updatedDelivery = await DeliveryModel.findByIdAndUpdate(
+      id,
+      { disponible },
+      { new: true } // Retourne la version mise à jour
+    );
+
+    if (!updatedDelivery) {
+      return res.status(404).json({ message: "Livraison introuvable" });
+    }
+
+    res.status(200).json({
+      message: `Disponibilité mise à jour avec succès à ${disponible}`,
+      delivery: updatedDelivery,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Erreur lors de la mise à jour de la disponibilité",
+      error,
+    });
+  }
+};

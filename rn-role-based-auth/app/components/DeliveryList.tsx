@@ -20,6 +20,7 @@ interface Delivery {
   sitePresence: string;
   siteDestination: string;
   presence: boolean;
+  disponible: Date | null;
 }
 
 interface DeliveryListProps {
@@ -120,7 +121,7 @@ const DeliveryList: React.FC<DeliveryListProps> = ({
   };
 
   const handleSetDeliveryStatus = (id: string) => {
-    Alert.alert("Présence", "L'article est-il disponible ?", [
+    Alert.alert("Présence", "L'article est-il présent ?", [
       { text: "Non", onPress: () => updateDeliveryPresence(id, false) },
       { text: "Oui", onPress: () => updateDeliveryPresence(id, true) },
     ]);

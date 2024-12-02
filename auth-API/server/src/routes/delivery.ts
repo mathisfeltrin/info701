@@ -6,6 +6,7 @@ import {
   updateDelivery,
   deleteDelivery,
   updatePresence,
+  updateDisponibility,
 } from "../controllers/delivery";
 
 const deliveryRouter = Router();
@@ -27,5 +28,8 @@ deliveryRouter.delete("/:id", deleteDelivery);
 
 // Mettre à jour la présence d'une livraison
 deliveryRouter.put("/:id/presence", updatePresence);
+
+// Mettre à jour la disponibilité d'une livraison
+deliveryRouter.put("/:id/disponibility", updateDisponibility);
 
 export default deliveryRouter;

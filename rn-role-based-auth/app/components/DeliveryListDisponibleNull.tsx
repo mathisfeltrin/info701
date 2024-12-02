@@ -28,7 +28,7 @@ interface DeliveryListProps {
   sellerRole: string | undefined;
 }
 
-const DeliveryListPresenceFalse: React.FC<DeliveryListProps> = ({
+const DeliveryListDisponibleNull: React.FC<DeliveryListProps> = ({
   sellerSite,
   sellerRole,
 }) => {
@@ -54,7 +54,12 @@ const DeliveryListPresenceFalse: React.FC<DeliveryListProps> = ({
       // setDeliveries(data);
 
       // affichage des livraisons avec une presence false
-      setDeliveries(data.filter((delivery: Delivery) => !delivery.presence));
+      // setDeliveries(data.filter((delivery: Delivery) => !delivery.presence));
+
+      // affichage des livraisons non disponibles
+      setDeliveries(
+        data.filter((delivery: Delivery) => delivery.disponible === null)
+      );
 
       // if (sellerRole === "RCO") {
       //   setDeliveries(data.filter((delivery: Delivery) => !delivery.presence));
@@ -123,10 +128,55 @@ const DeliveryListPresenceFalse: React.FC<DeliveryListProps> = ({
     }
   };
 
+  const updateDeliveryDisponibility = async (
+    id: string,
+    disponible: Date | null
+  ) => {
+    try {
+      const response = await fetch(
+        `http://172.20.10.4:8000/deliveries/${id}/disponibility`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ disponible }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la mise à jour de la présence");
+      }
+
+      const updatedDelivery = await response.json();
+
+      // Mettre à jour l'état local
+      setDeliveries((prevDeliveries) =>
+        prevDeliveries.map((delivery) =>
+          delivery._id === id ? { ...delivery, disponible } : delivery
+        )
+      );
+
+      console.log("Livraison mise à jour :", updatedDelivery);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleSetDeliveryStatus = (id: string) => {
-    Alert.alert("Présence", "L'article est-il disponible ?", [
+    Alert.alert("Présence", "L'article est-il présent ?", [
       { text: "Non", onPress: () => updateDeliveryPresence(id, false) },
       { text: "Oui", onPress: () => updateDeliveryPresence(id, true) },
+    ]);
+  };
+
+  const handleSetDeliveryDisponibility = (id: string) => {
+    Alert.alert("Disponibilité", "L'article est-il disponible aujourd'hui ?", [
+      { text: "Non", onPress: () => updateDeliveryDisponibility(id, null) },
+      {
+        text: "Oui",
+        onPress: () => updateDeliveryDisponibility(id, new Date()),
+      },
     ]);
   };
 
@@ -143,7 +193,7 @@ const DeliveryListPresenceFalse: React.FC<DeliveryListProps> = ({
               style={styles.deliveryItem}
               onPress={() => {
                 if (sellerRole === "RCO") {
-                  handleSetDeliveryStatus(item._id);
+                  handleSetDeliveryDisponibility(item._id);
                 }
               }}
             >
@@ -246,4 +296,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DeliveryListPresenceFalse;
+export default DeliveryListDisponibleNull;
