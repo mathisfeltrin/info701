@@ -46,19 +46,11 @@ const DeliveryList: React.FC<DeliveryListProps> = ({
       }
       const data = await response.json();
 
-      if (sellerRole === "Vendeur") {
-        const filteredDeliveries = data.filter(
-          (delivery: Delivery) =>
-            delivery.sitePresence === sellerSite ||
-            delivery.siteDestination === sellerSite
-        );
+      // ? log sellerSite
+      console.log("sellerSite : ", sellerSite);
 
-        // afffichage des livraisons selon le site du vendeur
-        setDeliveries(filteredDeliveries);
-      } else {
-        // affichage de toutes les livraisons
-        setDeliveries(data);
-      }
+      // affichage de toutes les livraisons
+      setDeliveries(data);
     } catch (err) {
       setError((err as Error).message);
       Alert.alert("Erreur", error || "Impossible de charger les livraisons");

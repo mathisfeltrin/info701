@@ -9,6 +9,7 @@ import {
   DrawerContentComponentProps,
 } from "@react-navigation/drawer";
 import DeliveryList from "../../components/DeliveryList";
+import CreateDelivery from "../../components/CreateDelivery";
 
 const Drawer = createDrawerNavigator();
 
@@ -56,6 +57,17 @@ const RCO: FC<Props> = () => {
             />
           )}
         </Drawer.Screen>
+
+        <Drawer.Screen
+          name="CreateDelivery"
+          options={{ title: "Créer une Livraison" }}
+        >
+          {() => (
+            <CreateDelivery
+              onSubmit={() => setRefreshKey((prevKey) => prevKey + 1)}
+            />
+          )}
+        </Drawer.Screen>
       </Drawer.Navigator>
     </NavigationContainer>
   );
@@ -69,6 +81,10 @@ const CustomDrawerContent: FC<
       <DrawerItem
         label="Liste des Livraisons"
         onPress={() => navigation.navigate("DeliveryList")}
+      />
+      <DrawerItem
+        label="Créer une Livraison"
+        onPress={() => navigation.navigate("CreateDelivery")}
       />
       <View style={styles.separator} />
       <DrawerItem
