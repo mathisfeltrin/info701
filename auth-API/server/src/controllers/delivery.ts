@@ -14,6 +14,7 @@ export const createDelivery: RequestHandler = async (req: any, res: any) => {
       sitePresence,
       siteDestination,
       presence,
+      disponible,
     } = req.body;
 
     // Vérifier si le site est valide
@@ -48,6 +49,7 @@ export const createDelivery: RequestHandler = async (req: any, res: any) => {
       sitePresence,
       siteDestination,
       presence,
+      disponible,
     });
 
     await newDelivery.save();

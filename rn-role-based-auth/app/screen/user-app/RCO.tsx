@@ -10,6 +10,7 @@ import {
 } from "@react-navigation/drawer";
 import DeliveryList from "../../components/DeliveryList";
 import CreateDelivery from "../../components/CreateDelivery";
+import DeliveryListPresenceFalse from "../../components/DeliveryListPresenceFalse";
 
 const Drawer = createDrawerNavigator();
 
@@ -29,7 +30,7 @@ const RCO: FC<Props> = () => {
   return (
     <NavigationContainer independent={true}>
       <Drawer.Navigator
-        initialRouteName="DeliveryList"
+        initialRouteName="DeliveryListPresenceFalse"
         screenOptions={{
           headerStyle: {
             backgroundColor: "#007bff",
@@ -46,9 +47,18 @@ const RCO: FC<Props> = () => {
         )}
       >
         <Drawer.Screen
-          name="DeliveryList"
-          options={{ title: "Liste des Livraisons" }}
+          name="DeliveryListPresenceFalse"
+          options={{ title: "Livraisons non présentes" }}
         >
+          {() => (
+            <DeliveryListPresenceFalse
+              sellerSite={profile?.site}
+              sellerRole={profile?.role}
+              key={refreshKey}
+            />
+          )}
+        </Drawer.Screen>
+        <Drawer.Screen name="DeliveryList" options={{ title: "Livraisons" }}>
           {() => (
             <DeliveryList
               sellerSite={profile?.site}
@@ -57,7 +67,6 @@ const RCO: FC<Props> = () => {
             />
           )}
         </Drawer.Screen>
-
         <Drawer.Screen
           name="CreateDelivery"
           options={{ title: "Créer une Livraison" }}
@@ -79,7 +88,11 @@ const CustomDrawerContent: FC<
   return (
     <DrawerContentScrollView {...props}>
       <DrawerItem
-        label="Liste des Livraisons"
+        label="Livraisons non présentes"
+        onPress={() => navigation.navigate("DeliveryListPresenceFalse")}
+      />
+      <DrawerItem
+        label="Livraisons"
         onPress={() => navigation.navigate("DeliveryList")}
       />
       <DrawerItem

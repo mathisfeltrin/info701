@@ -27,7 +27,7 @@ interface DeliveryListProps {
   sellerRole: string | undefined;
 }
 
-const DeliveryList: React.FC<DeliveryListProps> = ({
+const DeliveryListPresenceFalse: React.FC<DeliveryListProps> = ({
   sellerSite,
   sellerRole,
 }) => {
@@ -50,7 +50,10 @@ const DeliveryList: React.FC<DeliveryListProps> = ({
       console.log("sellerSite : ", sellerSite);
 
       // affichage de toutes les livraisons
-      setDeliveries(data);
+      // setDeliveries(data);
+
+      // affichage des livraisons avec une presence false
+      setDeliveries(data.filter((delivery: Delivery) => !delivery.presence));
 
       // if (sellerRole === "RCO") {
       //   setDeliveries(data.filter((delivery: Delivery) => !delivery.presence));
@@ -242,4 +245,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DeliveryList;
+export default DeliveryListPresenceFalse;
