@@ -14,7 +14,7 @@ const Drawer = createDrawerNavigator();
 
 interface Props {}
 
-const RCO: FC<Props> = (props) => {
+const RCO: FC<Props> = () => {
   const { profile, logout } = useContext(AuthContext);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -48,7 +48,13 @@ const RCO: FC<Props> = (props) => {
           name="DeliveryList"
           options={{ title: "Liste des Livraisons" }}
         >
-          {() => <DeliveryList sellerSite={profile?.site} key={refreshKey} />}
+          {() => (
+            <DeliveryList
+              sellerSite={profile?.site}
+              sellerRole={profile?.role}
+              key={refreshKey}
+            />
+          )}
         </Drawer.Screen>
       </Drawer.Navigator>
     </NavigationContainer>

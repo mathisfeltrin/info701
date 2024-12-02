@@ -47,7 +47,13 @@ const Vendeur: FC<Props> = () => {
           name="DeliveryList"
           options={{ title: "Liste des Livraisons" }}
         >
-          {() => <DeliveryList sellerSite={profile?.site} key={refreshKey} />}
+          {() => (
+            <DeliveryList
+              sellerSite={profile?.site}
+              sellerRole={profile?.role}
+              key={refreshKey}
+            />
+          )}
         </Drawer.Screen>
 
         <Drawer.Screen

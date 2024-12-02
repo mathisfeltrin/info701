@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Alert,
   RefreshControl,
+  TouchableOpacity,
 } from "react-native";
 
 interface Delivery {
@@ -18,21 +19,23 @@ interface Delivery {
   couleur: string;
   sitePresence: string;
   siteDestination: string;
+  presence: boolean;
 }
 
 interface DeliveryListProps {
   sellerSite: string | undefined;
+  sellerRole: string | undefined;
 }
 
-const DeliveryList: React.FC<DeliveryListProps> = ({ sellerSite }) => {
+const DeliveryList: React.FC<DeliveryListProps> = ({
+  sellerSite,
+  sellerRole,
+}) => {
   const [deliveries, setDeliveries] = useState<Delivery[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
-
-  // ? Recherche des livraisons selon le site du vendeur
-  //console.log("sellerSite : ", sellerSite);
 
   const fetchDeliveries = async () => {
     setLoading(true);
@@ -43,17 +46,19 @@ const DeliveryList: React.FC<DeliveryListProps> = ({ sellerSite }) => {
       }
       const data = await response.json();
 
-      const filteredDeliveries = data.filter(
-        (delivery: Delivery) =>
-          delivery.sitePresence === sellerSite ||
-          delivery.siteDestination === sellerSite
-      );
+      if (sellerRole === "Vendeur") {
+        const filteredDeliveries = data.filter(
+          (delivery: Delivery) =>
+            delivery.sitePresence === sellerSite ||
+            delivery.siteDestination === sellerSite
+        );
 
-      // afffichage des livraisons selon le site du vendeur
-      setDeliveries(filteredDeliveries);
-
-      // affichage de toutes les livraisons
-      // setDeliveries(data);
+        // afffichage des livraisons selon le site du vendeur
+        setDeliveries(filteredDeliveries);
+      } else {
+        // affichage de toutes les livraisons
+        setDeliveries(data);
+      }
     } catch (err) {
       setError((err as Error).message);
       Alert.alert("Erreur", error || "Impossible de charger les livraisons");
@@ -80,6 +85,45 @@ const DeliveryList: React.FC<DeliveryListProps> = ({ sellerSite }) => {
     );
   }
 
+  const updateDeliveryPresence = async (id: string, presence: boolean) => {
+    try {
+      const response = await fetch(
+        `http://172.20.10.4:8000/deliveries/${id}/presence`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ presence }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la mise à jour de la présence");
+      }
+
+      const updatedDelivery = await response.json();
+
+      // Mettre à jour l'état local
+      setDeliveries((prevDeliveries) =>
+        prevDeliveries.map((delivery) =>
+          delivery._id === id ? { ...delivery, presence } : delivery
+        )
+      );
+
+      console.log("Livraison mise à jour :", updatedDelivery);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSetDeliveryStatus = (id: string) => {
+    Alert.alert("Présence", "L'article est-il disponible ?", [
+      { text: "Non", onPress: () => updateDeliveryPresence(id, false) },
+      { text: "Oui", onPress: () => updateDeliveryPresence(id, true) },
+    ]);
+  };
+
   return (
     <>
       {deliveries.length === 0 ? (
@@ -89,7 +133,14 @@ const DeliveryList: React.FC<DeliveryListProps> = ({ sellerSite }) => {
           data={deliveries}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
-            <View style={styles.deliveryItem}>
+            <TouchableOpacity
+              style={styles.deliveryItem}
+              onPress={() => {
+                if (sellerRole === "RCO") {
+                  handleSetDeliveryStatus(item._id);
+                }
+              }}
+            >
               <View style={styles.deliveryHeader}>
                 <Text style={styles.deliveryHeaderText}>
                   Client : {item.name}
@@ -107,7 +158,10 @@ const DeliveryList: React.FC<DeliveryListProps> = ({ sellerSite }) => {
               <Text style={styles.deliveryText}>
                 Site Destination : {item.siteDestination}
               </Text>
-            </View>
+              <Text style={styles.deliveryText}>
+                Présence : {item.presence ? "Oui" : "Non"}
+              </Text>
+            </TouchableOpacity>
           )}
           refreshControl={
             <RefreshControl
