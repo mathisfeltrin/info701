@@ -43,6 +43,7 @@ const CreateDelivery: React.FC<DeliveryFormProps> = ({ onSubmit }) => {
     siteDestination: SITES[0],
     presence: false,
     disponible: null,
+    frais: null,
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -82,6 +83,7 @@ const CreateDelivery: React.FC<DeliveryFormProps> = ({ onSubmit }) => {
         siteDestination: SITES[0],
         presence: false,
         disponible: null,
+        frais: null,
       });
       if (onSubmit) onSubmit();
     } catch (err) {

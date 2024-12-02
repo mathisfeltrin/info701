@@ -21,6 +21,7 @@ interface Delivery {
   siteDestination: string;
   presence: boolean;
   disponible: Date | null;
+  frais: Date | null;
 }
 
 interface DeliveryListProps {

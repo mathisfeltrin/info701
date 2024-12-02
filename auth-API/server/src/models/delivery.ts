@@ -36,6 +36,7 @@ interface DeliveryDocument extends Document {
     | "Lille"; // Site de destination
   presence: boolean;
   disponible: Date;
+  frais: boolean;
 }
 
 const deliverySchema = new Schema<DeliveryDocument>(
@@ -87,6 +88,7 @@ const deliverySchema = new Schema<DeliveryDocument>(
     },
     presence: { type: Boolean },
     disponible: { type: Date, default: null },
+    frais: { type: Boolean },
   },
   { timestamps: true }
 );

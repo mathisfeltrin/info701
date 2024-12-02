@@ -29,7 +29,7 @@ interface DeliveryListProps {
   sellerRole: string | undefined;
 }
 
-const DeliveryList: React.FC<DeliveryListProps> = ({
+const DeliveryListPresenceFalse: React.FC<DeliveryListProps> = ({
   sellerSite,
   sellerRole,
 }) => {
@@ -52,7 +52,12 @@ const DeliveryList: React.FC<DeliveryListProps> = ({
       console.log("sellerSite : ", sellerSite);
 
       // affichage de toutes les livraisons
-      setDeliveries(data);
+      // setDeliveries(data);
+
+      // affichage des livraisons avec des frais à null
+      setDeliveries(
+        data.filter((delivery: Delivery) => delivery.frais === null)
+      );
 
       // if (sellerRole === "RCO") {
       //   setDeliveries(data.filter((delivery: Delivery) => !delivery.presence));
@@ -89,16 +94,16 @@ const DeliveryList: React.FC<DeliveryListProps> = ({
     );
   }
 
-  const updateDeliveryPresence = async (id: string, presence: boolean) => {
+  const updateDeliveryFrais = async (id: string, frais: boolean) => {
     try {
       const response = await fetch(
-        `http://172.20.10.4:8000/deliveries/${id}/presence`,
+        `http://172.20.10.4:8000/deliveries/${id}/frais`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ presence }),
+          body: JSON.stringify({ frais }),
         }
       );
 
@@ -111,7 +116,7 @@ const DeliveryList: React.FC<DeliveryListProps> = ({
       // Mettre à jour l'état local
       setDeliveries((prevDeliveries) =>
         prevDeliveries.map((delivery) =>
-          delivery._id === id ? { ...delivery, presence } : delivery
+          delivery._id === id ? { ...delivery, frais } : delivery
         )
       );
 
@@ -122,9 +127,9 @@ const DeliveryList: React.FC<DeliveryListProps> = ({
   };
 
   const handleSetDeliveryStatus = (id: string) => {
-    Alert.alert("Présence", "L'article est-il présent ?", [
-      { text: "Non", onPress: () => updateDeliveryPresence(id, false) },
-      { text: "Oui", onPress: () => updateDeliveryPresence(id, true) },
+    Alert.alert("Frais", "L'article possède-t-il des frais ?", [
+      { text: "Non", onPress: () => updateDeliveryFrais(id, false) },
+      { text: "Oui", onPress: () => updateDeliveryFrais(id, true) },
     ]);
   };
 
@@ -164,15 +169,6 @@ const DeliveryList: React.FC<DeliveryListProps> = ({
               </Text>
               <Text style={styles.deliveryText}>
                 Présence : {item.presence ? "Oui" : "Non"}
-              </Text>
-              <Text style={styles.deliveryText}>
-                Disponible :{" "}
-                {item.disponible
-                  ? new Date(item.disponible).toLocaleDateString()
-                  : "Non"}
-              </Text>
-              <Text style={styles.deliveryText}>
-                Frais : {item.frais ? "Oui" : "Non"}
               </Text>
             </TouchableOpacity>
           )}
@@ -253,4 +249,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DeliveryList;
+export default DeliveryListPresenceFalse;
