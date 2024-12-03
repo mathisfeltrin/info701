@@ -42,6 +42,7 @@ interface DeliveryDocument extends Document {
   qualityControlDate: Date;
   paid: boolean;
   virement: boolean;
+  dateLivraison: Date;
 }
 
 const deliverySchema = new Schema<DeliveryDocument>(
@@ -99,6 +100,7 @@ const deliverySchema = new Schema<DeliveryDocument>(
     qualityControlDate: { type: Date, default: null },
     paid: { type: Boolean, default: false },
     virement: { type: Boolean, default: false },
+    dateLivraison: { type: Date, default: null },
   },
   { timestamps: true }
 );

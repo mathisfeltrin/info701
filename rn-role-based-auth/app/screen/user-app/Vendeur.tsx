@@ -11,6 +11,7 @@ import {
   DrawerContentComponentProps,
 } from "@react-navigation/drawer";
 import DeliveryListQualityControlDateNull from "../../components/DeliveryListQualityControlDateNull";
+import DeliveryListDateLivraisonNull from "../../components/DeliveryListDateLivraisonNull";
 
 const Drawer = createDrawerNavigator();
 
@@ -69,6 +70,18 @@ const Vendeur: FC<Props> = () => {
           )}
         </Drawer.Screen>
         <Drawer.Screen
+          name="DeliveryListDateLivraisonNull"
+          options={{ title: "Liste des Livraisons sans date de livraison" }}
+        >
+          {() => (
+            <DeliveryListDateLivraisonNull
+              sellerSite={profile?.site}
+              sellerRole={profile?.role}
+              key={refreshKey}
+            />
+          )}
+        </Drawer.Screen>
+        <Drawer.Screen
           name="CreateDelivery"
           options={{ title: "Créer une Livraison" }}
         >
@@ -97,6 +110,10 @@ const CustomDrawerContent: FC<
         onPress={() =>
           navigation.navigate("DeliveryListQualityControlDateNull")
         }
+      />
+      <DrawerItem
+        label="Liste des Livraisons sans date de livraison"
+        onPress={() => navigation.navigate("DeliveryListDateLivraisonNull")}
       />
       <DrawerItem
         label="Créer une Livraison"

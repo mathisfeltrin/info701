@@ -21,6 +21,7 @@ export const createDelivery: RequestHandler = async (req: any, res: any) => {
       qualityControlDate,
       paid,
       virement,
+      dateLivraison,
     } = req.body;
 
     // Vérifier si le site est valide
@@ -62,6 +63,7 @@ export const createDelivery: RequestHandler = async (req: any, res: any) => {
       qualityControlDate,
       paid,
       virement,
+      dateLivraison,
     });
 
     await newDelivery.save();
@@ -445,6 +447,38 @@ export const updateVirement: RequestHandler = async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({
       message: "Erreur lors de la mise à jour du virement",
+      error,
+    });
+  }
+};
+
+// Mettre à jour la date de livraison
+export const updateDateLivraison: RequestHandler = async (
+  req: any,
+  res: any
+) => {
+  try {
+    const { id } = req.params;
+    const { dateLivraison } = req.body;
+
+    // Mise à jour de la propriété `dateLivraison`
+    const updatedDelivery = await DeliveryModel.findByIdAndUpdate(
+      id,
+      { dateLivraison },
+      { new: true }
+    );
+
+    if (!updatedDelivery) {
+      return res.status(404).json({ message: "Livraison introuvable" });
+    }
+
+    res.status(200).json({
+      message: `Date de livraison mise à jour avec succès à ${dateLivraison}`,
+      delivery: updatedDelivery,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Erreur lors de la mise à jour de la date de livraison",
       error,
     });
   }
