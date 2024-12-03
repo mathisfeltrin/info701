@@ -5,3 +5,5 @@ export const signupUrl = `${root}/auth/signup`;
 export const privateUrl = `${root}/auth/private`;
 export const adminUrl = `${root}/auth/admin`;
 export const profileUrl = `${root}/auth/profile`;
+
+export const deliveriesUrl = `${root}/deliveries`;

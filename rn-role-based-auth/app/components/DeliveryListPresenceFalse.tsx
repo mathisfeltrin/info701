@@ -9,6 +9,7 @@ import {
   RefreshControl,
   TouchableOpacity,
 } from "react-native";
+import { deliveriesUrl } from "../url";
 
 interface Delivery {
   _id: string;
@@ -42,7 +43,7 @@ const DeliveryListPresenceFalse: React.FC<DeliveryListProps> = ({
   const fetchDeliveries = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://172.20.10.4:8000/deliveries");
+      const response = await fetch(deliveriesUrl);
       if (!response.ok) {
         throw new Error("Erreur lors de la récupération des livraisons");
       }
@@ -94,16 +95,13 @@ const DeliveryListPresenceFalse: React.FC<DeliveryListProps> = ({
 
   const updateDeliveryPresence = async (id: string, presence: boolean) => {
     try {
-      const response = await fetch(
-        `http://172.20.10.4:8000/deliveries/${id}/presence`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ presence }),
-        }
-      );
+      const response = await fetch(`${deliveriesUrl}/${id}/presence`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ presence }),
+      });
 
       if (!response.ok) {
         throw new Error("Erreur lors de la mise à jour de la présence");

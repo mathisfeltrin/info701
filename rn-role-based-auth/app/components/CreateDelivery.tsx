@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import { deliveriesUrl } from "../url";
 
 const SITES = [
   "Annecy",
@@ -58,7 +59,7 @@ const CreateDelivery: React.FC<DeliveryFormProps> = ({ onSubmit }) => {
     setError(null);
 
     try {
-      const response = await fetch("http://172.20.10.4:8000/deliveries", {
+      const response = await fetch(deliveriesUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
