@@ -19,6 +19,7 @@ export const createDelivery: RequestHandler = async (req: any, res: any) => {
       config,
       arrivalDate,
       qualityControlDate,
+      paid,
     } = req.body;
 
     // Vérifier si le site est valide
@@ -58,6 +59,7 @@ export const createDelivery: RequestHandler = async (req: any, res: any) => {
       config,
       arrivalDate,
       qualityControlDate,
+      paid,
     });
 
     await newDelivery.save();
@@ -371,6 +373,41 @@ export const updateQualityControlDate: RequestHandler = async (
     res.status(500).json({
       message:
         "Erreur lors de la mise à jour de la date de controle de qualité",
+      error,
+    });
+  }
+};
+
+// Mettre à jour les frais d'une livraison
+export const updatePayement: RequestHandler = async (req: any, res: any) => {
+  try {
+    const { id } = req.params;
+    const { paid } = req.body; // Passez `presence` dans le corps de la requête
+
+    if (typeof paid !== "boolean") {
+      return res
+        .status(400)
+        .json({ message: "La propriété frais doit être un booléen" });
+    }
+
+    // Mise à jour de la propriété `presence`
+    const updatedDelivery = await DeliveryModel.findByIdAndUpdate(
+      id,
+      { paid },
+      { new: true } // Retourne la version mise à jour
+    );
+
+    if (!updatedDelivery) {
+      return res.status(404).json({ message: "Livraison introuvable" });
+    }
+
+    res.status(200).json({
+      message: `Payement mise à jour avec succès à ${paid}`,
+      delivery: updatedDelivery,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Erreur lors de la mise à jour du payement",
       error,
     });
   }

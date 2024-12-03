@@ -11,6 +11,7 @@ import {
   updateConfig,
   updateArrivalDate,
   updateQualityControlDate,
+  updatePayement,
 } from "../controllers/delivery";
 
 const deliveryRouter = Router();
@@ -47,5 +48,8 @@ deliveryRouter.put("/:id/arrivalDate", updateArrivalDate);
 
 // Mettre à jour la date de controle de qualité d'une livraison
 deliveryRouter.put("/:id/qualityControlDate", updateQualityControlDate);
+
+// Mettre à jour le payment d'une livraison
+deliveryRouter.put("/:id/payement", updatePayement);
 
 export default deliveryRouter;

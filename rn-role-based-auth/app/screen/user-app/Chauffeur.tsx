@@ -30,7 +30,7 @@ const Chauffeur: FC<Props> = () => {
   return (
     <NavigationContainer independent={true}>
       <Drawer.Navigator
-        initialRouteName="DeliveryList"
+        initialRouteName="DeliveryListArrivalDateNull"
         screenOptions={{
           headerStyle: { backgroundColor: "#007bff" },
           headerTintColor: "#fff",
