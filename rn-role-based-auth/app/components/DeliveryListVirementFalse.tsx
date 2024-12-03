@@ -28,6 +28,7 @@ interface Delivery {
   qualityControlDate: Date | null;
   paid: boolean;
   virement: boolean;
+  dateLivraison: Date | null;
 }
 
 interface DeliveryListProps {

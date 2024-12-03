@@ -24,6 +24,11 @@ interface Delivery {
   disponible: Date | null;
   frais: boolean | null;
   config: string | null;
+  arrivalDate: Date | null;
+  qualityControlDate: Date | null;
+  paid: boolean;
+  virement: boolean;
+  dateLivraison: Date | null;
 }
 
 interface DeliveryListProps {
