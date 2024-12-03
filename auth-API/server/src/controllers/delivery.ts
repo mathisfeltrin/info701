@@ -18,6 +18,7 @@ export const createDelivery: RequestHandler = async (req: any, res: any) => {
       frais,
       config,
       arrivalDate,
+      qualityControlDate,
     } = req.body;
 
     // Vérifier si le site est valide
@@ -56,6 +57,7 @@ export const createDelivery: RequestHandler = async (req: any, res: any) => {
       frais,
       config,
       arrivalDate,
+      qualityControlDate,
     });
 
     await newDelivery.save();
@@ -336,6 +338,39 @@ export const updateArrivalDate: RequestHandler = async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({
       message: "Erreur lors de la mise à jour de la disponibilité",
+      error,
+    });
+  }
+};
+
+// Mettre à jour la date d'arrivée d'une livraison
+export const updateQualityControlDate: RequestHandler = async (
+  req: any,
+  res: any
+) => {
+  try {
+    const { id } = req.params;
+    const { qualityControlDate } = req.body;
+
+    // Mise à jour de la propriété `presence`
+    const updatedDelivery = await DeliveryModel.findByIdAndUpdate(
+      id,
+      { qualityControlDate },
+      { new: true }
+    );
+
+    if (!updatedDelivery) {
+      return res.status(404).json({ message: "Livraison introuvable" });
+    }
+
+    res.status(200).json({
+      message: `Date de controle de qualité mise à jour avec succès à ${qualityControlDate}`,
+      delivery: updatedDelivery,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message:
+        "Erreur lors de la mise à jour de la date de controle de qualité",
       error,
     });
   }
