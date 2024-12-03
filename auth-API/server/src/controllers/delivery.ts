@@ -16,6 +16,7 @@ export const createDelivery: RequestHandler = async (req: any, res: any) => {
       presence,
       disponible,
       frais,
+      config,
     } = req.body;
 
     // Vérifier si le site est valide
@@ -52,6 +53,7 @@ export const createDelivery: RequestHandler = async (req: any, res: any) => {
       presence,
       disponible,
       frais,
+      config,
     });
 
     await newDelivery.save();
@@ -268,6 +270,41 @@ export const updateFrais: RequestHandler = async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({
       message: "Erreur lors de la mise à jour des frais",
+      error,
+    });
+  }
+};
+
+// Mettre à jour la configuration d'une livraison
+export const updateConfig: RequestHandler = async (req: any, res: any) => {
+  try {
+    const { id } = req.params;
+    const { config } = req.body; // Passez `config` dans le corps de la requête
+
+    if (typeof config !== "string") {
+      return res
+        .status(400)
+        .json({ message: "La propriété presence doit être un booléen" });
+    }
+
+    // Mise à jour de la propriété `presence`
+    const updatedDelivery = await DeliveryModel.findByIdAndUpdate(
+      id,
+      { config },
+      { new: true } // Retourne la version mise à jour
+    );
+
+    if (!updatedDelivery) {
+      return res.status(404).json({ message: "Livraison introuvable" });
+    }
+
+    res.status(200).json({
+      message: `Présence mise à jour avec succès à ${config}`,
+      delivery: updatedDelivery,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Erreur lors de la mise à jour de la présence",
       error,
     });
   }

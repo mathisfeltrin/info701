@@ -8,6 +8,7 @@ import {
   updatePresence,
   updateDisponibility,
   updateFrais,
+  updateConfig,
 } from "../controllers/delivery";
 
 const deliveryRouter = Router();
@@ -35,5 +36,8 @@ deliveryRouter.put("/:id/disponibility", updateDisponibility);
 
 // Mettre à jour les frais d'une livraison
 deliveryRouter.put("/:id/frais", updateFrais);
+
+// Mettre à jour la configuration d'une livraison
+deliveryRouter.put("/:id/config", updateConfig);
 
 export default deliveryRouter;

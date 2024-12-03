@@ -23,6 +23,7 @@ interface Delivery {
   presence: boolean;
   disponible: Date | null;
   frais: boolean | null;
+  config: string | null;
 }
 
 interface DeliveryListProps {
@@ -171,6 +172,9 @@ const DeliveryList: React.FC<DeliveryListProps> = ({
               </Text>
               <Text style={styles.deliveryText}>
                 Frais : {item.frais ? "Oui" : "Non"}
+              </Text>
+              <Text style={styles.deliveryText}>
+                Configuration : {item.config || "Non"}
               </Text>
             </TouchableOpacity>
           )}

@@ -23,6 +23,7 @@ interface Delivery {
   presence: boolean;
   disponible: Date | null;
   frais: Date | null;
+  config: string | null;
 }
 
 interface DeliveryListProps {

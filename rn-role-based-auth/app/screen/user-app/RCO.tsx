@@ -13,6 +13,7 @@ import CreateDelivery from "../../components/CreateDelivery";
 import DeliveryListPresenceFalse from "../../components/DeliveryListPresenceFalse";
 import DeliveryListDisponibleNull from "../../components/DeliveryListDisponibleNull";
 import DeliveryListFraisNull from "../../components/DeliveryListFraisNull";
+import DeliveryListConfigNull from "../../components/DeliveryListConfigNull";
 
 const Drawer = createDrawerNavigator();
 
@@ -84,6 +85,18 @@ const RCO: FC<Props> = () => {
             />
           )}
         </Drawer.Screen>
+        <Drawer.Screen
+          name="DeliveryListConfigNull"
+          options={{ title: "Livraisons sans configuration" }}
+        >
+          {() => (
+            <DeliveryListConfigNull
+              sellerSite={profile?.site}
+              sellerRole={profile?.role}
+              key={refreshKey}
+            />
+          )}
+        </Drawer.Screen>
         <Drawer.Screen name="DeliveryList" options={{ title: "Livraisons" }}>
           {() => (
             <DeliveryList
@@ -124,6 +137,10 @@ const CustomDrawerContent: FC<
       <DrawerItem
         label="Livraisons avec frais à null"
         onPress={() => navigation.navigate("DeliveryListFraisNull")}
+      />
+      <DrawerItem
+        label="Livraisons sans configuration"
+        onPress={() => navigation.navigate("DeliveryListConfigNull")}
       />
       <DrawerItem
         label="Livraisons"
