@@ -8,8 +8,10 @@ import {
   Alert,
   RefreshControl,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import { deliveriesUrl } from "../url";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 interface Delivery {
   _id: string;
@@ -40,6 +42,12 @@ const DeliveryListDisponibleNull: React.FC<DeliveryListProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
+  const [selectedDelivery, setSelectedDelivery] = useState<Delivery | null>(
+    null
+  );
+  const [tempDate, setTempDate] = useState<Date | null>(null);
 
   const fetchDeliveries = async () => {
     setLoading(true);
@@ -132,6 +140,10 @@ const DeliveryListDisponibleNull: React.FC<DeliveryListProps> = ({
     id: string,
     disponible: Date | null
   ) => {
+    if (!disponible) {
+      Alert.alert("Erreur", "Veuillez sélectionner une date valide.");
+      return;
+    }
     try {
       const response = await fetch(`${deliveriesUrl}/${id}/disponibility`, {
         method: "PUT",
@@ -155,8 +167,14 @@ const DeliveryListDisponibleNull: React.FC<DeliveryListProps> = ({
       );
 
       console.log("Livraison mise à jour :", updatedDelivery);
+      Alert.alert("Succès", "Date de disponibilité mise à jour !");
+      closeModal();
     } catch (error) {
       console.error(error);
+      Alert.alert(
+        "Erreur",
+        "Impossible de mettre à jour la date de disponibilité."
+      );
     }
   };
 
@@ -177,6 +195,42 @@ const DeliveryListDisponibleNull: React.FC<DeliveryListProps> = ({
     ]);
   };
 
+  const openModal = (delivery: Delivery) => {
+    setSelectedDelivery(delivery);
+    setIsDatePickerVisible(true);
+  };
+
+  const closeModal = () => {
+    setSelectedDelivery(null);
+    setTempDate(null);
+    setIsDatePickerVisible(false);
+  };
+
+  const showDatePicker = (delivery: Delivery) => {
+    setSelectedDelivery(delivery);
+    setIsDatePickerVisible(true);
+  };
+
+  const handleDateChange = (event: any, date?: Date) => {
+    if (Platform.OS === "android") {
+      setIsDatePickerVisible(false); // Cacher le picker après la sélection
+    }
+    if (date) {
+      setTempDate(date); // Met à jour la date temporaire
+    }
+  };
+
+  const confirmDate = () => {
+    if (tempDate && selectedDelivery) {
+      updateDeliveryDisponibility(selectedDelivery._id, tempDate);
+      setTempDate(null);
+      setSelectedDelivery(null);
+      setIsDatePickerVisible(false);
+    } else {
+      Alert.alert("Erreur", "Veuillez sélectionner une date valide.");
+    }
+  };
+
   return (
     <>
       {deliveries.length === 0 ? (
@@ -189,9 +243,7 @@ const DeliveryListDisponibleNull: React.FC<DeliveryListProps> = ({
             <TouchableOpacity
               style={styles.deliveryItem}
               onPress={() => {
-                if (sellerRole === "RCO") {
-                  handleSetDeliveryDisponibility(item._id);
-                }
+                showDatePicker(item);
               }}
             >
               <View style={styles.deliveryHeader}>
@@ -224,6 +276,36 @@ const DeliveryListDisponibleNull: React.FC<DeliveryListProps> = ({
             />
           }
         />
+      )}
+      {isDatePickerVisible && (
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>
+              Sélectionner une Date de Disponibilité
+            </Text>
+            <DateTimePicker
+              value={tempDate || new Date()}
+              mode="date"
+              display="spinner"
+              onChange={handleDateChange}
+              textColor="#333"
+            />
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.cancelButton}
+                onPress={closeModal}
+              >
+                <Text style={styles.cancelButtonText}>Annuler</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.confirmButton}
+                onPress={confirmDate}
+              >
+                <Text style={styles.confirmButtonText}>Confirmer</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
       )}
     </>
   );
@@ -290,6 +372,70 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#333",
     marginBottom: 5,
+  },
+  modalOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    zIndex: 10,
+  },
+  modalContainer: {
+    width: "90%",
+    height: "60%",
+    backgroundColor: "#fff",
+    borderRadius: 15,
+    padding: 20,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#007bff",
+    marginBottom: 20,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 20,
+    width: "100%",
+  },
+  confirmButton: {
+    flex: 1,
+    marginHorizontal: 5,
+    backgroundColor: "#007bff",
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  confirmButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  cancelButton: {
+    flex: 1,
+    marginHorizontal: 5,
+    backgroundColor: "#ccc",
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cancelButtonText: {
+    color: "#333",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

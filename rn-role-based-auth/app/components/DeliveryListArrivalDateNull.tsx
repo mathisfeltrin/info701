@@ -218,8 +218,9 @@ const DeliveryListArrivalDateNull: React.FC<DeliveryListProps> = ({
         )
       );
 
+      console.log("Livraison mise à jour :", updatedDelivery);
       Alert.alert("Succès", "Date d'arrivée mise à jour !");
-      closeModal(); // Fermer la popup après la mise à jour
+      closeModal();
     } catch (error) {
       console.error(error);
       Alert.alert("Erreur", "Impossible de mettre à jour la date d'arrivée.");
@@ -263,109 +264,6 @@ const DeliveryListArrivalDateNull: React.FC<DeliveryListProps> = ({
   };
 
   return (
-    // <>
-    //   {deliveries.length === 0 ? (
-    //     <Text style={styles.noDeliveries}>Aucune livraison trouvée.</Text>
-    //   ) : (
-    //     <FlatList
-    //       data={deliveries}
-    //       keyExtractor={(item) => item._id}
-    //       renderItem={({ item }) => (
-    //         <TouchableOpacity
-    //           style={styles.deliveryItem}
-    //           onPress={() => {
-    //             openModal(item);
-    //           }}
-    //         >
-    //           <View style={styles.deliveryHeader}>
-    //             <Text style={styles.deliveryHeaderText}>
-    //               Client : {item.name}
-    //             </Text>
-    //           </View>
-    //           <Text style={styles.deliveryText}>Modèle : {item.model}</Text>
-    //           <Text style={styles.deliveryText}>
-    //             Référence : {item.reference}
-    //           </Text>
-    //           <Text style={styles.deliveryText}>ID : {item.numeroId}</Text>
-    //           <Text style={styles.deliveryText}>Couleur : {item.couleur}</Text>
-    //           <Text style={styles.deliveryText}>
-    //             Site Présent : {item.sitePresence}
-    //           </Text>
-    //           <Text style={styles.deliveryText}>
-    //             Site Destination : {item.siteDestination}
-    //           </Text>
-    //           <Text style={styles.deliveryText}>
-    //             Présence : {item.presence ? "Oui" : "Non"}
-    //           </Text>
-    //         </TouchableOpacity>
-    //       )}
-    //       refreshControl={
-    //         <RefreshControl
-    //           refreshing={isRefreshing}
-    //           onRefresh={fetchDeliveries}
-    //           colors={["#007bff"]}
-    //         />
-    //       }
-    //     />
-    //   )}
-    //   <Modal
-    //     animationType="slide"
-    //     transparent={true}
-    //     visible={isDatePickerVisible}
-    //     onRequestClose={closeModal}
-    //   >
-    //     <View style={styles.modalContainer}>
-    //       <View style={styles.modalContent}>
-    //         <Text style={styles.modalTitle}>
-    //           Mise à jour de la date d'arrivée
-    //         </Text>
-    //         {selectedDelivery && (
-    //           <>
-    //             <Text style={styles.modalText}>
-    //               Livraison pour : {selectedDelivery.name}
-    //             </Text>
-    //             <Text style={styles.modalText}>
-    //               Modèle : {selectedDelivery.model}
-    //             </Text>
-    //             <Text style={styles.modalText}>
-    //               Date actuelle :{" "}
-    //               {selectedDelivery.arrivalDate
-    //                 ? new Date(
-    //                     selectedDelivery.arrivalDate
-    //                   ).toLocaleDateString()
-    //                 : "Non définie"}
-    //             </Text>
-    //             {/* DateTimePickerModal */}
-    //             {isDatePickerVisible && (
-    //               <DateTimePicker
-    //                 value={selectedDate || new Date()}
-    //                 mode="date"
-    //                 display="default"
-    //                 onChange={handleDateChange}
-    //               />
-    //             )}
-
-    //             {/* Bouton pour soumettre */}
-    //             <TouchableOpacity
-    //               style={styles.submitButton}
-    //               onPress={() =>
-    //                 updateArrivalDate(
-    //                   selectedDelivery!._id,
-    //                   selectedDelivery!.arrivalDate
-    //                 )
-    //               }
-    //             >
-    //               <Text style={styles.submitButtonText}>Confirmer</Text>
-    //             </TouchableOpacity>
-    //           </>
-    //         )}
-    //         <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
-    //           <Text style={styles.closeButtonText}>Fermer</Text>
-    //         </TouchableOpacity>
-    //       </View>
-    //     </View>
-    //   </Modal>
-    // </>
     <>
       <FlatList
         data={deliveries}
@@ -413,7 +311,7 @@ const DeliveryListArrivalDateNull: React.FC<DeliveryListProps> = ({
               mode="date"
               display="spinner"
               onChange={handleDateChange}
-              textColor="#333" // Fonctionne uniquement avec display="spinner"
+              textColor="#333"
             />
             <View style={styles.buttonContainer}>
               <TouchableOpacity
