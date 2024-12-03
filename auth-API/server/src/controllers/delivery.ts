@@ -20,6 +20,7 @@ export const createDelivery: RequestHandler = async (req: any, res: any) => {
       arrivalDate,
       qualityControlDate,
       paid,
+      virement,
     } = req.body;
 
     // Vérifier si le site est valide
@@ -60,6 +61,7 @@ export const createDelivery: RequestHandler = async (req: any, res: any) => {
       arrivalDate,
       qualityControlDate,
       paid,
+      virement,
     });
 
     await newDelivery.save();
@@ -378,7 +380,7 @@ export const updateQualityControlDate: RequestHandler = async (
   }
 };
 
-// Mettre à jour les frais d'une livraison
+// Mettre à jour le payement d'une livraison
 export const updatePayement: RequestHandler = async (req: any, res: any) => {
   try {
     const { id } = req.params;
@@ -408,6 +410,41 @@ export const updatePayement: RequestHandler = async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({
       message: "Erreur lors de la mise à jour du payement",
+      error,
+    });
+  }
+};
+
+// Mettre à jour le virement d'une livraison
+export const updateVirement: RequestHandler = async (req: any, res: any) => {
+  try {
+    const { id } = req.params;
+    const { virement } = req.body; // Passez `presence` dans le corps de la requête
+
+    if (typeof virement !== "boolean") {
+      return res
+        .status(400)
+        .json({ message: "La propriété virement doit être un booléen" });
+    }
+
+    // Mise à jour de la propriété `presence`
+    const updatedDelivery = await DeliveryModel.findByIdAndUpdate(
+      id,
+      { virement },
+      { new: true } // Retourne la version mise à jour
+    );
+
+    if (!updatedDelivery) {
+      return res.status(404).json({ message: "Livraison introuvable" });
+    }
+
+    res.status(200).json({
+      message: `Virement mise à jour avec succès à ${virement}`,
+      delivery: updatedDelivery,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Erreur lors de la mise à jour du virement",
       error,
     });
   }
