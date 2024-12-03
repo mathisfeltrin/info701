@@ -38,6 +38,7 @@ interface DeliveryDocument extends Document {
   disponible: Date;
   frais: boolean;
   config: string;
+  arrivalDate: Date;
 }
 
 const deliverySchema = new Schema<DeliveryDocument>(
@@ -91,6 +92,7 @@ const deliverySchema = new Schema<DeliveryDocument>(
     disponible: { type: Date, default: null },
     frais: { type: Boolean },
     config: { type: String },
+    arrivalDate: { type: Date, default: null },
   },
   { timestamps: true }
 );

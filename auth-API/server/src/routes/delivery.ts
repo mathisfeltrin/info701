@@ -9,6 +9,7 @@ import {
   updateDisponibility,
   updateFrais,
   updateConfig,
+  updateArrivalDate,
 } from "../controllers/delivery";
 
 const deliveryRouter = Router();
@@ -39,5 +40,8 @@ deliveryRouter.put("/:id/frais", updateFrais);
 
 // Mettre à jour la configuration d'une livraison
 deliveryRouter.put("/:id/config", updateConfig);
+
+// Mettre à jour la date d'arrivée d'une livraison
+deliveryRouter.put("/:id/arrivalDate", updateArrivalDate);
 
 export default deliveryRouter;

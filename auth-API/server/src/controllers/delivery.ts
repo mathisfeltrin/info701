@@ -17,6 +17,7 @@ export const createDelivery: RequestHandler = async (req: any, res: any) => {
       disponible,
       frais,
       config,
+      arrivalDate,
     } = req.body;
 
     // Vérifier si le site est valide
@@ -54,6 +55,7 @@ export const createDelivery: RequestHandler = async (req: any, res: any) => {
       disponible,
       frais,
       config,
+      arrivalDate,
     });
 
     await newDelivery.save();
@@ -305,6 +307,35 @@ export const updateConfig: RequestHandler = async (req: any, res: any) => {
   } catch (error) {
     res.status(500).json({
       message: "Erreur lors de la mise à jour de la présence",
+      error,
+    });
+  }
+};
+
+// Mettre à jour la date d'arrivée d'une livraison
+export const updateArrivalDate: RequestHandler = async (req: any, res: any) => {
+  try {
+    const { id } = req.params;
+    const { arrivalDate } = req.body; // Passez `arrivalDate` dans le corps de la requête
+
+    // Mise à jour de la propriété `presence`
+    const updatedDelivery = await DeliveryModel.findByIdAndUpdate(
+      id,
+      { arrivalDate },
+      { new: true } // Retourne la version mise à jour
+    );
+
+    if (!updatedDelivery) {
+      return res.status(404).json({ message: "Livraison introuvable" });
+    }
+
+    res.status(200).json({
+      message: `Disponibilité mise à jour avec succès à ${arrivalDate}`,
+      delivery: updatedDelivery,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Erreur lors de la mise à jour de la disponibilité",
       error,
     });
   }
