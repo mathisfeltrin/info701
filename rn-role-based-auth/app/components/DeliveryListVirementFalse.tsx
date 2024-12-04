@@ -8,6 +8,7 @@ import {
   Alert,
   RefreshControl,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { deliveriesUrl } from "../url";
 
@@ -152,7 +153,18 @@ const DeliveryListVirementFalse: React.FC<DeliveryListProps> = ({
   return (
     <>
       {deliveries.length === 0 ? (
-        <Text style={styles.noDeliveries}>Aucune livraison trouvée.</Text>
+        <ScrollView
+          contentContainerStyle={{ flex: 1, justifyContent: "center" }}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={fetchDeliveries}
+              colors={["#007bff"]}
+            />
+          }
+        >
+          <Text style={styles.noDeliveries}>Aucune livraison trouvée.</Text>
+        </ScrollView>
       ) : (
         <FlatList
           data={deliveries}
