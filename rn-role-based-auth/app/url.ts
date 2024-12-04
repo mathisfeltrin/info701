@@ -1,3 +1,4 @@
+// Changer cette adresse par votre adresse IP
 const root = "http://172.20.10.4:8000";
 
 export const signinUrl = `${root}/auth/signin`;
