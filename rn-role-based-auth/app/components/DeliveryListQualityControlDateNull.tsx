@@ -184,6 +184,7 @@ const DeliveryListQualityControlDateNull: React.FC<DeliveryListProps> = ({
   const handleDateChange = (event: any, date?: Date) => {
     if (Platform.OS === "android") {
       setIsDatePickerVisible(false); // Cacher le picker sur Android après la sélection
+      confirmDate();
     }
 
     if (date) {

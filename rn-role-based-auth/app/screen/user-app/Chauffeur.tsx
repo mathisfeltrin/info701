@@ -45,7 +45,7 @@ const Chauffeur: FC<Props> = () => {
       >
         <Drawer.Screen
           name="DeliveryListArrivalDateNull"
-          options={{ title: "Livraisons sans date de livraison" }}
+          options={{ title: "Définir la date de livraison" }}
         >
           {() => (
             <DeliveryListArrivalDateNull
@@ -78,7 +78,7 @@ const CustomDrawerContent: FC<
   return (
     <DrawerContentScrollView {...props}>
       <DrawerItem
-        label="Livraisons sans date de livraison"
+        label="Définir la date de livraison"
         onPress={() => navigation.navigate("DeliveryListArrivalDateNull")}
       />
       <DrawerItem

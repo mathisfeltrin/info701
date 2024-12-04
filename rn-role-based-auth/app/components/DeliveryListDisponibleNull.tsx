@@ -219,6 +219,7 @@ const DeliveryListDisponibleNull: React.FC<DeliveryListProps> = ({
   const handleDateChange = (event: any, date?: Date) => {
     if (Platform.OS === "android") {
       setIsDatePickerVisible(false); // Cacher le picker après la sélection
+      confirmDate();
     }
     if (date) {
       setTempDate(date); // Met à jour la date temporaire
