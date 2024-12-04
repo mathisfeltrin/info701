@@ -79,7 +79,7 @@ const CustomDrawerContent: FC<
         onPress={() => navigation.navigate("DeliveryListPayementNull")}
       />
       <DrawerItem
-        label="Livraisons"
+        label="Liste des Livraisons"
         onPress={() => navigation.navigate("DeliveryList")}
       />
       <View style={styles.separator} />

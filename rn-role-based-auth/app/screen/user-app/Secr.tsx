@@ -42,7 +42,10 @@ const Secr: FC<Props> = () => {
           <CustomDrawerContent {...props} onLogout={handleLogout} />
         )}
       >
-        <Drawer.Screen name="DeliveryList" options={{ title: "Livraisons" }}>
+        <Drawer.Screen
+          name="DeliveryList"
+          options={{ title: "Liste des Livraisons" }}
+        >
           {() => (
             <DeliveryList
               sellerSite={profile?.site}
@@ -62,7 +65,7 @@ const CustomDrawerContent: FC<
   return (
     <DrawerContentScrollView {...props}>
       <DrawerItem
-        label="Livraisons"
+        label="Liste des Livraisons"
         onPress={() => navigation.navigate("DeliveryList")}
       />
       <View style={styles.separator} />

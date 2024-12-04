@@ -113,7 +113,7 @@ const RCO: FC<Props> = () => {
         </Drawer.Screen>
         <Drawer.Screen
           name="DeliveryListQualityControlDateNull"
-          options={{ title: "Liste des Livraisons sans QC" }}
+          options={{ title: "Livraisons sans QC" }}
         >
           {() => (
             <DeliveryListQualityControlDateNull
@@ -123,7 +123,10 @@ const RCO: FC<Props> = () => {
             />
           )}
         </Drawer.Screen>
-        <Drawer.Screen name="DeliveryList" options={{ title: "Livraisons" }}>
+        <Drawer.Screen
+          name="DeliveryList"
+          options={{ title: "Liste des Livraisons" }}
+        >
           {() => (
             <DeliveryList
               sellerSite={profile?.site}
@@ -173,13 +176,13 @@ const CustomDrawerContent: FC<
         onPress={() => navigation.navigate("DeliveryListDateLivraisonNull")}
       />
       <DrawerItem
-        label="Liste des Livraisons sans QC"
+        label="Livraisons sans QC"
         onPress={() =>
           navigation.navigate("DeliveryListQualityControlDateNull")
         }
       />
       <DrawerItem
-        label="Livraisons"
+        label="Liste des Livraisons"
         onPress={() => navigation.navigate("DeliveryList")}
       />
       <DrawerItem

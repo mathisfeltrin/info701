@@ -60,7 +60,7 @@ const Vendeur: FC<Props> = () => {
         </Drawer.Screen>
         <Drawer.Screen
           name="DeliveryListQualityControlDateNull"
-          options={{ title: "Liste des Livraisons sans QC" }}
+          options={{ title: "Livraisons sans QC" }}
         >
           {() => (
             <DeliveryListQualityControlDateNull
@@ -72,7 +72,7 @@ const Vendeur: FC<Props> = () => {
         </Drawer.Screen>
         <Drawer.Screen
           name="DeliveryListDateLivraisonNull"
-          options={{ title: "Liste des Livraisons sans date de livraison" }}
+          options={{ title: "Livraisons sans date de livraison" }}
         >
           {() => (
             <DeliveryListDateLivraisonNull
@@ -119,13 +119,13 @@ const CustomDrawerContent: FC<
         onPress={() => navigation.navigate("DeliveryList")}
       />
       <DrawerItem
-        label="Liste des Livraisons sans QC"
+        label="Livraisons sans QC"
         onPress={() =>
           navigation.navigate("DeliveryListQualityControlDateNull")
         }
       />
       <DrawerItem
-        label="Liste des Livraisons sans date de livraison"
+        label="Livraisons sans date de livraison"
         onPress={() => navigation.navigate("DeliveryListDateLivraisonNull")}
       />
       <DrawerItem
