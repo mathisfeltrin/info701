@@ -65,7 +65,9 @@ const DeliveryListPresenceFalse: React.FC<DeliveryListProps> = ({
       setDeliveries(
         data.filter(
           (delivery: Delivery) =>
-            delivery.presence === true && delivery.disponible && !delivery.frais
+            delivery.presence === true &&
+            delivery.disponible &&
+            delivery.frais === null
         )
       );
 
