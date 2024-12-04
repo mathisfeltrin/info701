@@ -46,7 +46,11 @@ const CreateDelivery: React.FC<DeliveryFormProps> = ({ onSubmit }) => {
     disponible: null,
     frais: null,
     config: null,
+    arrivalDate: null,
+    qualityControlDate: null,
     paid: false,
+    virement: false,
+    dateLivraison: null,
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -88,7 +92,11 @@ const CreateDelivery: React.FC<DeliveryFormProps> = ({ onSubmit }) => {
         disponible: null,
         frais: null,
         config: null,
+        arrivalDate: null,
+        qualityControlDate: null,
         paid: false,
+        virement: false,
+        dateLivraison: null,
       });
       if (onSubmit) onSubmit();
     } catch (err) {

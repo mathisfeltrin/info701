@@ -74,7 +74,10 @@ const DeliveryListDisponibleNull: React.FC<DeliveryListProps> = ({
 
       // affichage des livraisons non disponibles
       setDeliveries(
-        data.filter((delivery: Delivery) => delivery.disponible === null)
+        data.filter(
+          (delivery: Delivery) =>
+            delivery.presence === true && !delivery.disponible
+        )
       );
 
       // if (sellerRole === "RCO") {
@@ -111,35 +114,6 @@ const DeliveryListDisponibleNull: React.FC<DeliveryListProps> = ({
       </View>
     );
   }
-
-  const updateDeliveryPresence = async (id: string, presence: boolean) => {
-    try {
-      const response = await fetch(`${deliveriesUrl}/${id}/presence`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ presence }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Erreur lors de la mise à jour de la présence");
-      }
-
-      const updatedDelivery = await response.json();
-
-      // Mettre à jour l'état local
-      setDeliveries((prevDeliveries) =>
-        prevDeliveries.map((delivery) =>
-          delivery._id === id ? { ...delivery, presence } : delivery
-        )
-      );
-
-      console.log("Livraison mise à jour :", updatedDelivery);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const updateDeliveryDisponibility = async (
     id: string,
@@ -181,13 +155,6 @@ const DeliveryListDisponibleNull: React.FC<DeliveryListProps> = ({
         "Impossible de mettre à jour la date de disponibilité."
       );
     }
-  };
-
-  const handleSetDeliveryStatus = (id: string) => {
-    Alert.alert("Présence", "L'article est-il présent ?", [
-      { text: "Non", onPress: () => updateDeliveryPresence(id, false) },
-      { text: "Oui", onPress: () => updateDeliveryPresence(id, true) },
-    ]);
   };
 
   const handleSetDeliveryDisponibility = (id: string) => {
@@ -262,7 +229,10 @@ const DeliveryListDisponibleNull: React.FC<DeliveryListProps> = ({
                 Référence : {item.reference}
               </Text>
               <Text style={styles.deliveryText}>
-                Disponibilité : {item.disponible ? "Oui" : "Non"}
+                Disponibilité :{" "}
+                {item.disponible
+                  ? new Date(item.disponible).toLocaleDateString()
+                  : "Non"}
               </Text>
             </TouchableOpacity>
           )}

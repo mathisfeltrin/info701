@@ -63,7 +63,17 @@ const DeliveryListVirementFalse: React.FC<DeliveryListProps> = ({
 
       // affichage des livraisons avec des frais à null
       setDeliveries(
-        data.filter((delivery: Delivery) => delivery.virement === false)
+        data.filter(
+          (delivery: Delivery) =>
+            delivery.presence === true &&
+            delivery.disponible &&
+            delivery.frais !== null &&
+            delivery.config &&
+            delivery.arrivalDate &&
+            delivery.qualityControlDate !== null &&
+            delivery.paid === true &&
+            delivery.virement === false
+        )
       );
 
       // if (sellerRole === "RCO") {

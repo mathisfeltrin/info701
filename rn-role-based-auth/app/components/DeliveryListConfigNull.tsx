@@ -71,7 +71,15 @@ const DeliveryListPresenceFalse: React.FC<DeliveryListProps> = ({
       // setDeliveries(data);
 
       // affichage des livraisons avec une presence false
-      setDeliveries(data.filter((delivery: Delivery) => !delivery.config));
+      setDeliveries(
+        data.filter(
+          (delivery: Delivery) =>
+            delivery.presence === true &&
+            delivery.disponible &&
+            delivery.frais !== null &&
+            !delivery.config
+        )
+      );
 
       // if (sellerRole === "RCO") {
       //   setDeliveries(data.filter((delivery: Delivery) => !delivery.presence));

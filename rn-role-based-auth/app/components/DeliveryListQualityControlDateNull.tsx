@@ -79,7 +79,13 @@ const DeliveryListQualityControlDateNull: React.FC<DeliveryListProps> = ({
       // affichage des livraisons non disponibles
       setDeliveries(
         data.filter(
-          (delivery: Delivery) => delivery.qualityControlDate === null
+          (delivery: Delivery) =>
+            delivery.presence === true &&
+            delivery.disponible &&
+            delivery.frais !== null &&
+            delivery.config &&
+            delivery.arrivalDate &&
+            delivery.qualityControlDate === null
         )
       );
 

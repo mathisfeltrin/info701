@@ -76,7 +76,18 @@ const DeliveryListDateLivraisonNull: React.FC<DeliveryListProps> = ({
 
       // affichage des livraisons non disponibles
       setDeliveries(
-        data.filter((delivery: Delivery) => delivery.dateLivraison === null)
+        data.filter(
+          (delivery: Delivery) =>
+            delivery.presence === true &&
+            delivery.disponible &&
+            delivery.frais !== null &&
+            delivery.config &&
+            delivery.arrivalDate &&
+            delivery.qualityControlDate !== null &&
+            delivery.paid === true &&
+            delivery.virement === true &&
+            delivery.dateLivraison === null
+        )
       );
 
       // if (sellerRole === "RCO") {

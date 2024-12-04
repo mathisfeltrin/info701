@@ -63,7 +63,10 @@ const DeliveryListPresenceFalse: React.FC<DeliveryListProps> = ({
 
       // affichage des livraisons avec des frais à null
       setDeliveries(
-        data.filter((delivery: Delivery) => delivery.frais === null)
+        data.filter(
+          (delivery: Delivery) =>
+            delivery.presence === true && delivery.disponible && !delivery.frais
+        )
       );
 
       // if (sellerRole === "RCO") {
