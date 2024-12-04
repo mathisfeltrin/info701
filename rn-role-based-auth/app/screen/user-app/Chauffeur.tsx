@@ -56,6 +56,15 @@ const Chauffeur: FC<Props> = () => {
             />
           )}
         </Drawer.Screen>
+        <Drawer.Screen name="DeliveryList" options={{ title: "Livraisons" }}>
+          {() => (
+            <DeliveryList
+              sellerSite={profile?.site}
+              sellerRole={profile?.role}
+              key={refreshKey}
+            />
+          )}
+        </Drawer.Screen>
       </Drawer.Navigator>
     </NavigationContainer>
   );
@@ -69,6 +78,10 @@ const CustomDrawerContent: FC<
       <DrawerItem
         label="Livraisons sans date de livraison"
         onPress={() => navigation.navigate("DeliveryListArrivalDateNull")}
+      />
+      <DrawerItem
+        label="Livraisons"
+        onPress={() => navigation.navigate("DeliveryList")}
       />
       <View style={styles.separator} />
       <DrawerItem
