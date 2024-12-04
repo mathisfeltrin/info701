@@ -163,16 +163,8 @@ const DeliveryListPresenceFalse: React.FC<DeliveryListProps> = ({
               <Text style={styles.deliveryText}>
                 Référence : {item.reference}
               </Text>
-              <Text style={styles.deliveryText}>ID : {item.numeroId}</Text>
-              <Text style={styles.deliveryText}>Couleur : {item.couleur}</Text>
               <Text style={styles.deliveryText}>
-                Site Présent : {item.sitePresence}
-              </Text>
-              <Text style={styles.deliveryText}>
-                Site Destination : {item.siteDestination}
-              </Text>
-              <Text style={styles.deliveryText}>
-                Présence : {item.presence ? "Oui" : "Non"}
+                Frais : {item.frais ? "Oui" : "Non"}
               </Text>
             </TouchableOpacity>
           )}

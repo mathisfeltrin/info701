@@ -287,7 +287,7 @@ const DeliveryListArrivalDateNull: React.FC<DeliveryListProps> = ({
               Référence : {item.reference}
             </Text>
             <Text style={styles.deliveryText}>
-              Date d'arrivée :{" "}
+              Date d'arrivée :
               {item.arrivalDate
                 ? new Date(item.arrivalDate).toLocaleDateString()
                 : "Non définie"}

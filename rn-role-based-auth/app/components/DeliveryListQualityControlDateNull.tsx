@@ -222,7 +222,7 @@ const DeliveryListQualityControlDateNull: React.FC<DeliveryListProps> = ({
               Référence : {item.reference}
             </Text>
             <Text style={styles.deliveryText}>
-              Date de controle qualité :{" "}
+              Date de controle qualité :
               {item.qualityControlDate
                 ? new Date(item.qualityControlDate).toLocaleDateString()
                 : "Non définie"}

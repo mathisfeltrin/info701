@@ -158,29 +158,6 @@ const DeliveryList: React.FC<DeliveryListProps> = ({
               <Text style={styles.deliveryText}>
                 Référence : {item.reference}
               </Text>
-              <Text style={styles.deliveryText}>ID : {item.numeroId}</Text>
-              <Text style={styles.deliveryText}>Couleur : {item.couleur}</Text>
-              <Text style={styles.deliveryText}>
-                Site Présent : {item.sitePresence}
-              </Text>
-              <Text style={styles.deliveryText}>
-                Site Destination : {item.siteDestination}
-              </Text>
-              <Text style={styles.deliveryText}>
-                Présence : {item.presence ? "Oui" : "Non"}
-              </Text>
-              <Text style={styles.deliveryText}>
-                Disponible :{" "}
-                {item.disponible
-                  ? new Date(item.disponible).toLocaleDateString()
-                  : "Non"}
-              </Text>
-              <Text style={styles.deliveryText}>
-                Frais : {item.frais ? "Oui" : "Non"}
-              </Text>
-              <Text style={styles.deliveryText}>
-                Configuration : {item.config || "Non"}
-              </Text>
             </TouchableOpacity>
           )}
           refreshControl={

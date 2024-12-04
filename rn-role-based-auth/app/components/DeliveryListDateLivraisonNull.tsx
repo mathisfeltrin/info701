@@ -54,8 +54,6 @@ const DeliveryListDateLivraisonNull: React.FC<DeliveryListProps> = ({
     null
   );
 
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-
   const [tempDate, setTempDate] = useState<Date | null>(null);
 
   const fetchDeliveries = async () => {
