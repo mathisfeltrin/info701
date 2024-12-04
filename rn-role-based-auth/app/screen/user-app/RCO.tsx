@@ -14,6 +14,8 @@ import DeliveryListPresenceFalse from "../../components/DeliveryListPresenceFals
 import DeliveryListDisponibleNull from "../../components/DeliveryListDisponibleNull";
 import DeliveryListFraisNull from "../../components/DeliveryListFraisNull";
 import DeliveryListConfigNull from "../../components/DeliveryListConfigNull";
+import DeliveryListDateLivraisonNull from "../../components/DeliveryListDateLivraisonNull";
+import DeliveryListQualityControlDateNull from "../../components/DeliveryListQualityControlDateNull";
 
 const Drawer = createDrawerNavigator();
 
@@ -97,6 +99,30 @@ const RCO: FC<Props> = () => {
             />
           )}
         </Drawer.Screen>
+        <Drawer.Screen
+          name="DeliveryListDateLivraisonNull"
+          options={{ title: "Livraisons sans date de livraison" }}
+        >
+          {() => (
+            <DeliveryListDateLivraisonNull
+              sellerSite={profile?.site}
+              sellerRole={profile?.role}
+              key={refreshKey}
+            />
+          )}
+        </Drawer.Screen>
+        <Drawer.Screen
+          name="DeliveryListQualityControlDateNull"
+          options={{ title: "Liste des Livraisons sans QC" }}
+        >
+          {() => (
+            <DeliveryListQualityControlDateNull
+              sellerSite={profile?.site}
+              sellerRole={profile?.role}
+              key={refreshKey}
+            />
+          )}
+        </Drawer.Screen>
         <Drawer.Screen name="DeliveryList" options={{ title: "Livraisons" }}>
           {() => (
             <DeliveryList
@@ -141,6 +167,16 @@ const CustomDrawerContent: FC<
       <DrawerItem
         label="Livraisons sans configuration"
         onPress={() => navigation.navigate("DeliveryListConfigNull")}
+      />
+      <DrawerItem
+        label="Livraisons sans date de livraison"
+        onPress={() => navigation.navigate("DeliveryListDateLivraisonNull")}
+      />
+      <DrawerItem
+        label="Liste des Livraisons sans QC"
+        onPress={() =>
+          navigation.navigate("DeliveryListQualityControlDateNull")
+        }
       />
       <DrawerItem
         label="Livraisons"
