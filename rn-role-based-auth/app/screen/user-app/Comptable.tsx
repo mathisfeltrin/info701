@@ -1,7 +1,6 @@
 import React, { FC, useContext, useState } from "react";
 import { View, StyleSheet, Alert } from "react-native";
 import { AuthContext } from "../../context/AuthProvider";
-import CreateDelivery from "../../components/CreateDelivery";
 import DeliveryList from "../../components/DeliveryList";
 import { NavigationContainer } from "@react-navigation/native";
 import {
@@ -10,8 +9,6 @@ import {
   DrawerItem,
   DrawerContentComponentProps,
 } from "@react-navigation/drawer";
-import DeliveryListArrivalDateNull from "../../components/DeliveryListArrivalDateNull";
-import DeliveryListPayementNull from "../../components/DeliveryListPayementNull";
 import DeliveryListVirementFalse from "../../components/DeliveryListVirementFalse";
 
 const Drawer = createDrawerNavigator();
@@ -58,6 +55,15 @@ const Comptable: FC<Props> = () => {
             />
           )}
         </Drawer.Screen>
+        <Drawer.Screen name="DeliveryList" options={{ title: "Livraisons" }}>
+          {() => (
+            <DeliveryList
+              sellerSite={profile?.site}
+              sellerRole={profile?.role}
+              key={refreshKey}
+            />
+          )}
+        </Drawer.Screen>
       </Drawer.Navigator>
     </NavigationContainer>
   );
@@ -71,6 +77,10 @@ const CustomDrawerContent: FC<
       <DrawerItem
         label="Virement non reçu"
         onPress={() => navigation.navigate("DeliveryListVirementFalse")}
+      />
+      <DrawerItem
+        label="Livraisons"
+        onPress={() => navigation.navigate("DeliveryList")}
       />
       <View style={styles.separator} />
       <DrawerItem

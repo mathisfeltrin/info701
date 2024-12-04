@@ -1,7 +1,6 @@
 import React, { FC, useContext, useState } from "react";
 import { View, StyleSheet, Alert } from "react-native";
 import { AuthContext } from "../../context/AuthProvider";
-import CreateDelivery from "../../components/CreateDelivery";
 import DeliveryList from "../../components/DeliveryList";
 import { NavigationContainer } from "@react-navigation/native";
 import {
